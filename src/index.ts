@@ -19,6 +19,8 @@ app.get("/", (req: Request, res: Response) => {
   res.send("hello Prashant")
 })
 
+app.use('/api/user/')
+
 app.listen(process.env.PORT, () => {
-  console.log(`server is working on http://localhost:${process.env.PORT}`)
+  console.log(`express is working on http://localhost:${process.env.PORT}`)
 })
