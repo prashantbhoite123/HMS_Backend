@@ -1,24 +1,24 @@
 import { Request, Response } from "express"
-import { Hosadmin } from "../model/hospital.user"
+import { Hospital } from "../model/hospital.user"
 import bcryptjs from "bcryptjs"
 
 type Props = {
-  username: string
+  hosname: string
   email: string
   password: string
 }
 const hospitalAdminRegistration = async (req: Request, res: Response) => {
   try {
-    const { username, email, password }: Props = req.body
-    const existingAdmin = await Hosadmin.findOne({ email })
+    const { hosname, email, password }: Props = req.body
+    const existingAdmin = await Hospital.findOne({ email })
     if (existingAdmin) {
       return res.status(404).json({ message: "Hos User already exist" })
     }
 
     const dicreptedPassword = bcryptjs.hashSync(password, 10)
 
-    const newAdmin = await Hosadmin.create({
-      username,
+    const newAdmin = await Hospital.create({
+      hosname,
       email,
       password: dicreptedPassword,
     })

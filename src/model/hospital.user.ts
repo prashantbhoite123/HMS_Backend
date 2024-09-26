@@ -1,21 +1,22 @@
 import mongoose from "mongoose"
 
-const hospitalAdminRegistation = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
+const hospitalRegistation = new mongoose.Schema(
+  {
+    hosname: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  email: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  isAdmin: {
-    default: false,
-  },
-})
+  { timestamps: true }
+)
 
-export const Hosadmin = mongoose.model("Hosadmin", hospitalAdminRegistation)
+export const Hospital = mongoose.model("Hosadmin", hospitalRegistation)
