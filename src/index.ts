@@ -1,6 +1,7 @@
 import express, { Response, Request } from "express"
 import "dotenv/config"
 import mongoose from "mongoose"
+import hospitalRoute from "./Routes/Myhospital.route"
 
 import cors from "cors"
 const app = express()
@@ -19,7 +20,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("hello Prashant")
 })
 
-app.use('/api/user/')
+app.use("/api/hospital/", hospitalRoute)
 
 app.listen(process.env.PORT, () => {
   console.log(`express is working on http://localhost:${process.env.PORT}`)
