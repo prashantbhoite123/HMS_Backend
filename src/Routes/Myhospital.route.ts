@@ -1,13 +1,13 @@
 import express from "express"
-import userController from "../controllers/user.controller"
+import hospitalRegisterController from "../controllers/hospital.controller"
 import { validationHospitalRequest } from "../middleware/validation"
 
 const router = express.Router()
 
 router.post(
-  "/sign/up",
+  "/signup",
   validationHospitalRequest,
-  userController.userRegistgration
+  hospitalRegisterController.hospitalAdminRegistration
 )
 
 export default router

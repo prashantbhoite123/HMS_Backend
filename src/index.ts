@@ -20,7 +20,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("hello Prashant")
 })
 
-app.use("/api/hospital/", hospitalRoute)
+app.use("/api/hospital", hospitalRoute)
 
 app.listen(process.env.PORT, () => {
   console.log(`express is working on http://localhost:${process.env.PORT}`)

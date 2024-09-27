@@ -15,6 +15,15 @@ const hospitalRegistation = new mongoose.Schema(
       type: String,
       required: true,
     },
+    contact: {
+      type: Number,
+      required: true,
+    },
+    logo: {
+      type: String,
+      default:
+        "https://www.zilliondesigns.com/images/portfolio/healthcare-hospital/iStock-471629610-Converted.png",
+    },
   },
   { timestamps: true }
 )

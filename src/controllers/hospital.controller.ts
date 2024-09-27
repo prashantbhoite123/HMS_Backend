@@ -6,10 +6,12 @@ type Props = {
   hosname: string
   email: string
   password: string
+  contact: number
+  logo: string
 }
 const hospitalAdminRegistration = async (req: Request, res: Response) => {
   try {
-    const { hosname, email, password }: Props = req.body
+    const { hosname, email, password, contact, logo }: Props = req.body
     const existingAdmin = await Hospital.findOne({ email })
     if (existingAdmin) {
       return res.status(404).json({ message: "Hos User already exist" })
@@ -21,13 +23,19 @@ const hospitalAdminRegistration = async (req: Request, res: Response) => {
       hosname,
       email,
       password: dicreptedPassword,
+      contact,
+      logo,
     })
 
     res
       .status(200)
-      .json({ success: true, message: "Registration SuccessFully", newAdmin })
+      .json({ success: true, message: "Registration SuccessFully" })
   } catch (error) {
     console.log(`Error while createHospital api : ${error}`)
     return res.status(500).json({ message: "Something went wrong" })
   }
+}
+
+export default {
+  hospitalAdminRegistration,
 }
