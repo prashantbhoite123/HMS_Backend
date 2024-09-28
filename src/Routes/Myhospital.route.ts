@@ -18,4 +18,6 @@ router.post(
   validationHospitalLogin,
   hospitalRegisterController.hospitalAdminLogin
 )
+
+router.post("/google", hospitalRegisterController.continueWithGoogle)
 export default router

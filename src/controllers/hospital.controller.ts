@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import { Hospital } from "../model/hospital.user"
 import bcryptjs from "bcryptjs"
 import jwt from "jsonwebtoken"
+import { errorHandler } from "../utils/error.handler"
 
 const SECRETKEY = process.env.SECRETKEY
 type Props = {
@@ -47,9 +48,7 @@ const hospitalAdminLogin = async (req: Request, res: Response) => {
     const { email, password } = req.body
     const existHospital = await Hospital.findOne({ email })
     if (!existHospital) {
-      return res
-        .status(400)
-        .json({ message: "Hospital does not exist Registar first" })
+      return errorHandler(400, "Hospital does not exist Registar first")
     }
 
     const ismatchPassword = bcryptjs.compareSync(
@@ -58,7 +57,7 @@ const hospitalAdminLogin = async (req: Request, res: Response) => {
     )
 
     if (!ismatchPassword) {
-      return res.status(400).json({ message: "Invalid email or password" })
+      return errorHandler(400, "Invalid email or password")
     }
 
     const { password: abc, ...rest } = existHospital.toObject()
@@ -74,7 +73,73 @@ const hospitalAdminLogin = async (req: Request, res: Response) => {
   }
 }
 
+const continueWithGoogle = async (req: Request, res: Response) => {
+  try {
+    const { hosname, email, profilepic } = req.body
+
+    const existHospital = await Hospital.findOne({ email })
+
+    if (existHospital) {
+      const token = jwt.sign(
+        { _id: existHospital._id },
+        process.env.SECRETKEY as string,
+        {
+          expiresIn: "1d",
+        }
+      )
+
+      const { password, ...rest } = existHospital.toObject()
+
+      res
+        .cookie("token", token, {
+          httpOnly: true,
+          maxAge: 24 * 60 * 60 * 1000,
+        })
+        .status(200)
+        .json(rest)
+    }
+
+    const newPassword = Math.floor(
+      Math.random() * 8000000000 + 8000000000
+    ).toString()
+
+    const bcryptjsPassword = bcryptjs.hashSync(newPassword, 10)
+
+    const newHospital = await Hospital.create({
+      hosname,
+      email,
+      password: bcryptjsPassword,
+      profilepic,
+    })
+
+    if (!newHospital) {
+      return errorHandler(400, "hospital not found")
+    }
+    const token = jwt.sign(
+      { _id: newHospital._id },
+      process.env.SECRETKEY as string,
+      {
+        expiresIn: "1d",
+      }
+    )
+
+    const { password: abc, ...rest } = newHospital.toObject()
+
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      })
+      .status(200)
+      .json(rest)
+  } catch (error) {
+    console.log(`Error while continiue with google api :${error}`)
+    return errorHandler(400, "Error while continueWithGoogle")
+  }
+}
+
 export default {
   hospitalAdminRegistration,
   hospitalAdminLogin,
+  continueWithGoogle,
 }
