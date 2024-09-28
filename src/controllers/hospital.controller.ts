@@ -1,18 +1,24 @@
 import { Request, Response } from "express"
 import { Hospital } from "../model/hospital.user"
 import bcryptjs from "bcryptjs"
+import { watch } from "fs"
 
 type Props = {
   hosname: string
   email: string
   password: string
   contact: number
-  logo: string
 }
 const hospitalAdminRegistration = async (req: Request, res: Response) => {
   try {
-    const { hosname, email, password, contact, logo }: Props = req.body
+    console.log(req.body)
+    const { hosname, email, password, contact }: Props = req.body
+
+    if (!password || !hosname || !email || !contact) {
+      return res.status(400).json({ message: "Password is missing" })
+    }
     const existingAdmin = await Hospital.findOne({ email })
+
     if (existingAdmin) {
       return res.status(404).json({ message: "Hos User already exist" })
     }
@@ -24,7 +30,6 @@ const hospitalAdminRegistration = async (req: Request, res: Response) => {
       email,
       password: dicreptedPassword,
       contact,
-      logo,
     })
 
     res
