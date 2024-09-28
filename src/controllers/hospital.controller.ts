@@ -1,8 +1,9 @@
 import { Request, Response } from "express"
 import { Hospital } from "../model/hospital.user"
 import bcryptjs from "bcryptjs"
-import { watch } from "fs"
+import jwt from "jsonwebtoken"
 
+const SECRETKEY = process.env.SECRETKEY
 type Props = {
   hosname: string
   email: string
@@ -38,6 +39,38 @@ const hospitalAdminRegistration = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(`Error while createHospital api : ${error}`)
     return res.status(500).json({ message: "Something went wrong" })
+  }
+}
+
+const hospitalAdminLogin = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body
+    const existHospital = await Hospital.findOne({ email })
+    if (!existHospital) {
+      return res
+        .status(400)
+        .json({ message: "Hospital does not exist Registar first" })
+    }
+
+    const ismatchPassword = bcryptjs.compareSync(
+      password,
+      existHospital.password
+    )
+
+    if (!ismatchPassword) {
+      return res.status(400).json({ message: "Invalid email or password" })
+    }
+
+    const { password: abc, ...rest } = existHospital.toObject()
+    const token = jwt.sign({ _id: existHospital._id }, SECRETKEY as string)
+
+    res
+      .cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
+      .status(200)
+      .json({ message: "Hospital login successfully", rest })
+  } catch (error) {
+    console.log(`Error while login hospital :${error}`)
+    res.status(500).json({ message: "something went wrong" })
   }
 }
 

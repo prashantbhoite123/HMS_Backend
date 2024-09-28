@@ -4,12 +4,13 @@ import mongoose from "mongoose"
 import hospitalRoute from "./Routes/Myhospital.route"
 
 import cors from "cors"
+import cookieParser from "cookie-parser"
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
-
+app.use(cookieParser())
 mongoose
   .connect(process.env.MONGODB_URL as string, {
     dbName: "HMS",
