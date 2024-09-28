@@ -5,6 +5,7 @@ import hospitalRoute from "./Routes/Myhospital.route"
 
 import cors from "cors"
 import cookieParser from "cookie-parser"
+import { errorMiddleware } from "./middleware/error.middleware"
 const app = express()
 
 app.use(express.json())
@@ -24,6 +25,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api/hospital", hospitalRoute)
 
+app.use(errorMiddleware)
 app.listen(process.env.PORT, () => {
-  console.log(`express is working on http://localhost:${process.env.PORT}`)
+  console.log(`Server is working on http://localhost:${process.env.PORT}`)
 })

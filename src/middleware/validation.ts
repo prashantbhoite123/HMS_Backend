@@ -34,3 +34,14 @@ export const validationHospitalRequest = [
 
   handelValidationError,
 ]
+
+export const validationHospitalLogin = [
+  body("email").isString().notEmpty().withMessage("email must be a string"),
+
+  body("password")
+    .isString()
+    .notEmpty()
+    .withMessage("password  must be a string"),
+
+  handelValidationError,
+]

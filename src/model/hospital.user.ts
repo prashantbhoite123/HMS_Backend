@@ -1,5 +1,12 @@
 import mongoose from "mongoose"
 
+export interface Hospitaldocument extends Document {
+  hosname: string
+  email: string
+  password: string
+  contact: string
+}
+
 const hospitalRegistation = new mongoose.Schema(
   {
     hosname: {
@@ -16,11 +23,14 @@ const hospitalRegistation = new mongoose.Schema(
       required: true,
     },
     contact: {
-      type: Number,
+      type: String,
       required: true,
     },
   },
   { timestamps: true }
 )
 
-export const Hospital = mongoose.model("Hosadmin", hospitalRegistation)
+export const Hospital = mongoose.model<Hospitaldocument>(
+  "Hosadmin",
+  hospitalRegistation
+)
