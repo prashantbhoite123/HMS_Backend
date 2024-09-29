@@ -31,7 +31,7 @@ const hospitalRegistation = new mongoose.Schema(
 
     role: {
       type: String,
-      default: "petient",
+      default: "",
     },
     profilepic: {
       type: String,

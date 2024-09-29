@@ -77,7 +77,7 @@ const hospitalAdminLogin = async (req: Request, res: Response) => {
 
 const continueWithGoogle = async (req: Request, res: Response) => {
   try {
-    const { hosname, email, profilepic } = req.body
+    const { hosname, email, role, profilepic } = req.body
 
     const existHospital = await Hospital.findOne({ email })
 
@@ -112,6 +112,7 @@ const continueWithGoogle = async (req: Request, res: Response) => {
       email,
       password: bcryptjsPassword,
       profilepic,
+      role,
     })
 
     if (!newHospital) {
