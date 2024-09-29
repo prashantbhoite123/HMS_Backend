@@ -4,7 +4,7 @@ export interface Hospitaldocument extends Document {
   hosname: string
   email: string
   password: string
-  contact: string
+
   role: string
   profilepic: string
 }
@@ -24,10 +24,7 @@ const hospitalRegistation = new mongoose.Schema(
       type: String,
       required: true,
     },
-    contact: {
-      type: String,
-      required: true,
-    },
+ 
 
     role: {
       type: String,

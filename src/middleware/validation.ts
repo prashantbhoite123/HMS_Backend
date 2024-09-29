@@ -25,12 +25,6 @@ export const validationHospitalRequest = [
     .isString()
     .notEmpty()
     .withMessage("password  must be a string"),
-  body("contact")
-    .isString()
-    .notEmpty()
-    .withMessage("Contact must be provided")
-    .matches(/^\+?[1-9]\d{1,14}$/)
-    .withMessage("Contact must be a valid phone number"),
 
   handelValidationError,
 ]

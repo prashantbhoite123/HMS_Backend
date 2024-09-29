@@ -9,15 +9,14 @@ type Props = {
   hosname: string
   email: string
   password: string
-  contact: number
   role: string
 }
 const hospitalAdminRegistration = async (req: Request, res: Response) => {
   try {
     console.log(req.body)
-    const { hosname, email, password, contact, role }: Props = req.body
+    const { hosname, email, password, role }: Props = req.body
 
-    if (!password || !hosname || !email || !contact || !role) {
+    if (!password || !hosname || !email || !role) {
       return res.status(400).json({ message: "Password is missing" })
     }
     const existingAdmin = await Hospital.findOne({ email })
@@ -32,7 +31,7 @@ const hospitalAdminRegistration = async (req: Request, res: Response) => {
       hosname,
       email,
       password: dicreptedPassword,
-      contact,
+
       role,
     })
 
