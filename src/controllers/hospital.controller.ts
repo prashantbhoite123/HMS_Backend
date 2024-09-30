@@ -3,6 +3,7 @@ import { Hospital } from "../model/hospital.user"
 import bcryptjs from "bcryptjs"
 import jwt from "jsonwebtoken"
 import { errorHandler } from "../utils/error.handler"
+import { AuthenticatedRequest } from "../types"
 
 const SECRETKEY = process.env.SECRETKEY
 type Props = {
@@ -11,6 +12,24 @@ type Props = {
   password: string
   role: string
 }
+
+const getUser = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const id = req.user.id
+
+    const existuser = await Hospital.findById({})
+
+    if (!user) {
+      return errorHandler(400, "User does no exist")
+    }
+
+    const { password, ...rest } = existuser.toObject()
+    res.status(200).json({ success: true, rest })
+  } catch (error) {
+    console.log(`Error while getUser :${error}`)
+  }
+}
+
 const hospitalAdminRegistration = async (req: Request, res: Response) => {
   try {
     console.log(req.body)
@@ -97,7 +116,7 @@ const continueWithGoogle = async (req: Request, res: Response) => {
           maxAge: 24 * 60 * 60 * 1000,
         })
         .status(200)
-        .json(rest)
+        .json({ success: true, rest })
     }
 
     const newPassword = Math.floor(
@@ -133,7 +152,7 @@ const continueWithGoogle = async (req: Request, res: Response) => {
         maxAge: 24 * 60 * 60 * 1000,
       })
       .status(200)
-      .json(rest)
+      .json({ success: true, rest })
   } catch (error) {
     console.log(`Error while continiue with google api :${error}`)
     return errorHandler(400, "Error while continueWithGoogle")

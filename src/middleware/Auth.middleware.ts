@@ -21,14 +21,13 @@ export const isAuthentication = async (
       process.env.SECRETKEY as string
     ) as jwt.JwtPayload
 
-    const hospital: Hospitaldocument | null = await Hospital.findById(
-      decode._id
-    )
+    const user: Hospitaldocument | null = await Hospital.findById(decode._id)
 
-    if (!hospital) {
+    if (!user) {
       return errorHandler(400, "Hospital not found")
     }
-    req.hospital = hospital
+    req.user = user
+    next()
   } catch (error) {
     console.log(`Error while isAuthentication :${error}`)
     res.status(400).json({ message: "Error while isAuthentication" })
