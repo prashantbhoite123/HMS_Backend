@@ -2,6 +2,8 @@ import mongoose from "mongoose"
 
 export interface IAppointment extends Document {
   patientName: string
+  hospitalId: string
+  petientId: string
   doctorName: string
   appointmentDate: Date
   reason: string
@@ -13,30 +15,25 @@ export interface IHospital extends Document {
   description?: string
   email: string
   phoneNumber: string
-  website?: string
+
   address: {
     city: string
     state: string
     country: string
   }
-  registrationNumber: string
+
   hospitalType: string
   establishedDate?: Date
   totalBeds: number
   departments?: string[]
   services?: string[]
-  doctors?: mongoose.Types.ObjectId[]
+  doctors?: string[]
   operatingHours?: {
     weekdays: string
     weekends: string
   }
-  createdBy: mongoose.Types.ObjectId
+  owner: mongoose.Types.ObjectId
   createdAt: Date
   updatedAt?: Date
   // New Fields
-  old?: {
-    previousName?: string
-    previousAddress?: string
-    changeReason?: string
-  }
 }

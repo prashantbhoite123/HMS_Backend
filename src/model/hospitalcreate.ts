@@ -1,38 +1,39 @@
 import mongoose, { Schema } from "mongoose"
 import { IHospital } from "../Types/HospitalTypes"
 
-const AppointmentSchema: Schema = new Schema({
-  patientName: {
-    type: String,
-    required: true,
-  },
+// Define the doctor schema
+const doctorSchema: Schema = new Schema({
   doctorName: {
     type: String,
     required: true,
+    trim: true,
   },
-  appointmentDate: {
-    type: Date,
-    required: true,
-  },
-  reason: {
+  doctorType: {
     type: String,
     required: true,
+    trim: true, // Added trim to remove unwanted spaces
   },
-  status: {
+  education: {
     type: String,
     required: true,
-    enum: ["Pending", "Completed", "Cancelled"],
-    default: "Pending",
+    trim: true,
+  },
+  experienceYears: {
+    type: Number,
+    required: true,
+  },
+  specialization: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  workingHours: {
+    weekdays: { type: String, required: true, trim: true },
+    weekends: { type: String, trim: true },
   },
 })
 
-export const DoctorSchema: Schema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-})
-
+// Define the hospital schema
 const HospitalSchema: Schema = new Schema({
   hospitalName: {
     type: String,
@@ -50,18 +51,17 @@ const HospitalSchema: Schema = new Schema({
   phoneNumber: {
     type: String,
     required: true,
-  },
-  website: {
-    type: String,
+    trim: true,
   },
   address: {
-    city: { type: String, required: true },
-    state: { type: String, required: true },
-    country: { type: String, required: true },
+    city: { type: String, required: true, trim: true },
+    state: { type: String, required: true, trim: true },
+    country: { type: String, required: true, trim: true },
   },
   hospitalType: {
     type: String,
     required: true,
+    trim: true,
   },
   establishedDate: {
     type: Date,
@@ -76,17 +76,13 @@ const HospitalSchema: Schema = new Schema({
   services: {
     type: [String],
   },
-  doctors: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Doctor",
-    },
-  ],
+  
+  doctors: [doctorSchema], 
   operatingHours: {
-    weekdays: { type: String },
-    weekends: { type: String },
+    weekdays: { type: String, trim: true },
+    weekends: { type: String, trim: true },
   },
-  createdBy: {
+  owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -98,13 +94,8 @@ const HospitalSchema: Schema = new Schema({
   updatedAt: {
     type: Date,
   },
-
-  old: {
-    previousName: { type: String },
-    previousAddress: { type: String },
-    changeReason: { type: String },
-  },
 })
 
+// Export the model
 const Hospital = mongoose.model<IHospital>("Hospital", HospitalSchema)
 export default Hospital

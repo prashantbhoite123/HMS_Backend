@@ -39,6 +39,6 @@ const hospitalRegistation = new mongoose.Schema(
 )
 
 export const Hospital = mongoose.model<Hospitaldocument>(
-  "Hosadmin",
+  "User",
   hospitalRegistation
 )
