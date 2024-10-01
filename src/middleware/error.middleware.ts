@@ -1,12 +1,16 @@
-import { Response, Request } from "express"
-import { CustomError } from "../types"
+import { Request, Response, NextFunction } from "express"
 
 export const errorMiddleware = (
-  err: CustomError,
+  err: any,
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
-  const statuscode = err.statuscode || 500
-  const message = err.message || "Internale server error"
-  return res.status(statuscode).json({ success: false, message })
+  const statusCode = err.statusCode || 500
+  const message = err.message || "Internal server error"
+
+  return res.status(statusCode).json({
+    success: false,
+    message: message,
+  })
 }

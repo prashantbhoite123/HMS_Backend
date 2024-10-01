@@ -1,5 +1,6 @@
 import express from "express"
 import hospitalRegisterController from "../controllers/hospital.controller"
+import { isAuthentication } from "../middleware/Auth.middleware"
 import {
   validationHospitalLogin,
   validationHospitalRequest,
@@ -20,4 +21,5 @@ router.post(
 )
 
 router.post("/google", hospitalRegisterController.continueWithGoogle)
+router.get("/getUser", isAuthentication, hospitalRegisterController.getUser)
 export default router

@@ -11,9 +11,9 @@ export const isAuthentication = async (
 ) => {
   try {
     const { token } = req.cookies
-
+    console.log("this is a token==", token)
     if (!token) {
-      return errorHandler(400, "You have login first")
+      return next(errorHandler(400, "You have login first"))
     }
 
     const decode = jwt.verify(

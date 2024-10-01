@@ -1,11 +1,8 @@
-import { CustomError } from "../types"
 
-export const errorHandler = (
-  statuscode: number,
-  message: string
-): CustomError => {
-  const error: CustomError = new Error()
-  error.statuscode = statuscode
+
+export const errorHandler = (statusCode: number, message: string) => {
+  const error: any = new Error()
+  error.statusCode = statusCode
   error.message = message
   return error
 }

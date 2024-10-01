@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { Hospital } from "../model/hospital.user"
 import bcryptjs from "bcryptjs"
 import jwt from "jsonwebtoken"
@@ -13,19 +13,24 @@ type Props = {
   role: string
 }
 
-const getUser = async (req: AuthenticatedRequest, res: Response) => {
+const getUser = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const id = req.user.id
+    const _id = req.user?._id
+    console.log(req.user)
+    const existuser = await Hospital.findById(_id)
 
-    const existuser = await Hospital.findById({})
-
-    if (!user) {
-      return errorHandler(400, "User does no exist")
+    if (!existuser) {
+      return next(errorHandler(400, "User does no exist"))
     }
 
     const { password, ...rest } = existuser.toObject()
     res.status(200).json({ success: true, rest })
-  } catch (error) {
+  } catch (error: any) {
+    next(error.message)
     console.log(`Error while getUser :${error}`)
   }
 }
@@ -163,4 +168,5 @@ export default {
   hospitalAdminRegistration,
   hospitalAdminLogin,
   continueWithGoogle,
+  getUser,
 }

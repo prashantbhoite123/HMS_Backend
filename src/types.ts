@@ -5,6 +5,7 @@ export interface AuthenticatedRequest extends Request {
   user?: Hospitaldocument | null
 }
 
-export interface CustomError extends Error {
+export interface CustomError {
   statuscode?: number
+  message?: string
 }
