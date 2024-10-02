@@ -10,14 +10,14 @@ const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-// app.use(cors())
+app.use(cookieParser())
+
 app.use(
   cors({
     origin: "http://localhost:5173", // Your frontend URL
     credentials: true, // Allow credentials to be sent
   })
 )
-app.use(cookieParser())
 mongoose
   .connect(process.env.MONGODB_URL as string, {
     dbName: "HMS",

@@ -41,7 +41,7 @@ const hospitalAdminRegistration = async (req: Request, res: Response) => {
     const { hosname, email, password, role }: Props = req.body
 
     if (!password || !hosname || !email || !role) {
-      return res.status(400).json({ message: "Password is missing" })
+      return res.status(400).json({ message: "All field are required" })
     }
     const existingAdmin = await Hospital.findOne({ email })
 
@@ -68,12 +68,19 @@ const hospitalAdminRegistration = async (req: Request, res: Response) => {
   }
 }
 
-const hospitalAdminLogin = async (req: Request, res: Response) => {
+const hospitalAdminLogin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { email, password } = req.body
+    if (!email || !password || email === "" || password === "") {
+      next(errorHandler(400, "All field are required"))
+    }
     const existHospital = await Hospital.findOne({ email })
     if (!existHospital) {
-      return errorHandler(400, "Hospital does not exist Registar first")
+      return errorHandler(400, "User not found")
     }
 
     const ismatchPassword = bcryptjs.compareSync(
@@ -91,7 +98,7 @@ const hospitalAdminLogin = async (req: Request, res: Response) => {
     res
       .cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
       .status(200)
-      .json({ message: "Hospital login successfully", rest })
+      .json(rest)
   } catch (error) {
     console.log(`Error while login hospital :${error}`)
     res.status(500).json({ message: "something went wrong" })
@@ -115,13 +122,13 @@ const continueWithGoogle = async (req: Request, res: Response) => {
 
       const { password, ...rest } = existHospital.toObject()
 
-      res
+      return res
         .cookie("token", token, {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
         })
         .status(200)
-        .json({ success: true, rest })
+        .json(rest)
     }
 
     const newPassword = Math.floor(
@@ -157,7 +164,7 @@ const continueWithGoogle = async (req: Request, res: Response) => {
         maxAge: 24 * 60 * 60 * 1000,
       })
       .status(200)
-      .json({ success: true, rest })
+      .json(rest)
   } catch (error) {
     console.log(`Error while continiue with google api :${error}`)
     return errorHandler(400, "Error while continueWithGoogle")
