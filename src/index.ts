@@ -2,6 +2,7 @@ import express, { Response, Request } from "express"
 import "dotenv/config"
 import mongoose from "mongoose"
 import hospitalRoute from "./Routes/Myhospital.route"
+import userRoute from "./Routes/userAuth.routes"
 
 import cors from "cors"
 import cookieParser from "cookie-parser"
@@ -30,6 +31,7 @@ app.get("/", (req: Request, res: Response) => {
 })
 
 app.use("/api/hospital", hospitalRoute)
+app.use("/api/auth", userRoute)
 
 app.use(errorMiddleware)
 app.listen(process.env.PORT, () => {
