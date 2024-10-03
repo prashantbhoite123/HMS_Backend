@@ -11,13 +11,13 @@ const router = express.Router()
 router.post(
   "/signup",
   validationHospitalRequest,
-  hospitalRegisterController.hospitalAdminRegistration
+  hospitalRegisterController.userRegistration
 )
 
 router.post(
   "/signin",
   validationHospitalLogin,
-  hospitalRegisterController.hospitalAdminLogin
+  hospitalRegisterController.userLogin
 )
 
 router.post("/google", hospitalRegisterController.continueWithGoogle)

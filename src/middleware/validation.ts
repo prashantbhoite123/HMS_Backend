@@ -14,7 +14,7 @@ const handelValidationError = (
 }
 
 export const validationHospitalRequest = [
-  body("hosname")
+  body("username")
     .isString()
     .notEmpty()
     .withMessage("hospital name must be a string"),

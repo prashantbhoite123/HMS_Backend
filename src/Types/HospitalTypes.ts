@@ -13,7 +13,7 @@ export interface IAppointment extends Document {
 export interface IHospital extends Document {
   hospitalName: string
   description?: string
-  email: string
+
   phoneNumber: string
 
   address: {

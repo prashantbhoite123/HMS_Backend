@@ -35,7 +35,7 @@ const getUser = async (
   }
 }
 
-const hospitalAdminRegistration = async (req: Request, res: Response) => {
+const userRegistration = async (req: Request, res: Response) => {
   try {
     console.log(req.body)
     const { username, email, password, role }: Props = req.body
@@ -68,7 +68,7 @@ const hospitalAdminRegistration = async (req: Request, res: Response) => {
   }
 }
 
-const hospitalAdminLogin = async (
+const userLogin = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -172,8 +172,8 @@ const continueWithGoogle = async (req: Request, res: Response) => {
 }
 
 export default {
-  hospitalAdminRegistration,
-  hospitalAdminLogin,
+  userRegistration,
+  userLogin,
   continueWithGoogle,
   getUser,
 }

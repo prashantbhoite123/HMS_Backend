@@ -1,8 +1,9 @@
 import express, { Response, Request } from "express"
 import "dotenv/config"
 import mongoose from "mongoose"
-import hospitalRoute from "./Routes/Myhospital.route"
-import userRoute from "./Routes/userAuth.routes"
+import hospitalRoute from "./Routes/Common_Routes/Myhospital.route"
+import userRoute from "./Routes/Common_Routes/userAuth.routes"
+import hospitalcreate from "./Routes/Hospital_Routes/Hospital.routes"
 
 import cors from "cors"
 import cookieParser from "cookie-parser"
@@ -30,8 +31,12 @@ app.get("/", (req: Request, res: Response) => {
   res.send("hello Prashant")
 })
 
+// Common Routes//
 app.use("/api/hospital", hospitalRoute)
 app.use("/api/auth", userRoute)
+
+// Hospital Route//
+app.use("/api/my/hospital", hospitalcreate)
 
 app.use(errorMiddleware)
 app.listen(process.env.PORT, () => {

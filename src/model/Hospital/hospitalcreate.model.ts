@@ -33,7 +33,6 @@ const doctorSchema: Schema = new Schema({
   },
 })
 
-// Define the hospital schema
 const HospitalSchema: Schema = new Schema({
   hospitalName: {
     type: String,
@@ -43,11 +42,7 @@ const HospitalSchema: Schema = new Schema({
   description: {
     type: String,
   },
-  email: {
-    type: String,
-    required: true,
-    trim: true,
-  },
+ 
   phoneNumber: {
     type: String,
     required: true,
@@ -76,8 +71,8 @@ const HospitalSchema: Schema = new Schema({
   services: {
     type: [String],
   },
-  
-  doctors: [doctorSchema], 
+
+  doctors: [doctorSchema],
   operatingHours: {
     weekdays: { type: String, trim: true },
     weekends: { type: String, trim: true },
