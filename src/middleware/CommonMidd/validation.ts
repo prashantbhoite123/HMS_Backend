@@ -17,7 +17,7 @@ export const validationHospitalRequest = [
   body("username")
     .isString()
     .notEmpty()
-    .withMessage("hospital name must be a string"),
+    .withMessage("username name must be a string"),
 
   body("email").isString().notEmpty().withMessage("email must be a string"),
 

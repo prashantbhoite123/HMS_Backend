@@ -1,17 +1,11 @@
 import mongoose, { Schema } from "mongoose"
 import { IHospital } from "../../Types/HospitalTypes"
 
-// Define the doctor schema
 const doctorSchema: Schema = new Schema({
   doctorName: {
     type: String,
     required: true,
     trim: true,
-  },
-  doctorType: {
-    type: String,
-    required: true,
-    trim: true, // Added trim to remove unwanted spaces
   },
   education: {
     type: String,
@@ -28,12 +22,13 @@ const doctorSchema: Schema = new Schema({
     trim: true,
   },
   workingHours: {
-    weekdays: { type: String, required: true, trim: true },
-    weekends: { type: String, trim: true },
+    type: String,
+    required: true,
+    trim: true,
   },
 })
 
-const HospitalSchema: Schema = new Schema({
+const HospitalSchema: Schema = new Schema<IHospital>({
   hospitalName: {
     type: String,
     required: true,
@@ -42,7 +37,11 @@ const HospitalSchema: Schema = new Schema({
   description: {
     type: String,
   },
- 
+
+  picture: {
+    type: String,
+    required: true,
+  },
   phoneNumber: {
     type: String,
     required: true,
@@ -71,26 +70,13 @@ const HospitalSchema: Schema = new Schema({
   services: {
     type: [String],
   },
-
   doctors: [doctorSchema],
-  operatingHours: {
-    weekdays: { type: String, trim: true },
-    weekends: { type: String, trim: true },
-  },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-  },
 })
 
-// Export the model
 const Hospital = mongoose.model<IHospital>("Hospital", HospitalSchema)
 export default Hospital

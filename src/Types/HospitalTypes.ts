@@ -13,9 +13,7 @@ export interface IAppointment extends Document {
 export interface IHospital extends Document {
   hospitalName: string
   description?: string
-
   phoneNumber: string
-
   address: {
     city: string
     state: string
@@ -27,13 +25,14 @@ export interface IHospital extends Document {
   totalBeds: number
   departments?: string[]
   services?: string[]
-  doctors?: string[]
-  operatingHours?: {
-    weekdays: string
-    weekends: string
+  doctors: {
+    doctorName: string
+    education: string
+    experienceYears: number
+    specialization: string
+    workingHours: string
   }
+  picture: string
   owner: mongoose.Types.ObjectId
-  createdAt: Date
-  updatedAt?: Date
   // New Fields
 }
