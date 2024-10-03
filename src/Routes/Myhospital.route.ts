@@ -1,6 +1,6 @@
 import express from "express"
-import hospitalRegisterController from "../controllers/hospital.controller"
 import { isAuthentication } from "../middleware/Auth.middleware"
+import hospitalRegisterController from "../controllers/Comman_Controller/user.controller"
 import {
   validationHospitalLogin,
   validationHospitalRequest,

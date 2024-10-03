@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express"
-import { Hospital } from "../model/hospital.user"
 import bcryptjs from "bcryptjs"
 import jwt from "jsonwebtoken"
-import { errorHandler } from "../utils/error.handler"
-import { AuthenticatedRequest } from "../types"
+import { Hospital } from "../../model/common_Model/user.model"
+import { errorHandler } from "../../utils/error.handler"
+import { AuthenticatedRequest } from "../../Types/types"
 
 const SECRETKEY = process.env.SECRETKEY
 type Props = {
-  hosname: string
+  username: string
   email: string
   password: string
   role: string
@@ -38,9 +38,9 @@ const getUser = async (
 const hospitalAdminRegistration = async (req: Request, res: Response) => {
   try {
     console.log(req.body)
-    const { hosname, email, password, role }: Props = req.body
+    const { username, email, password, role }: Props = req.body
 
-    if (!password || !hosname || !email || !role) {
+    if (!password || !username || !email || !role) {
       return res.status(400).json({ message: "All field are required" })
     }
     const existingAdmin = await Hospital.findOne({ email })
@@ -52,7 +52,7 @@ const hospitalAdminRegistration = async (req: Request, res: Response) => {
     const dicreptedPassword = bcryptjs.hashSync(password, 10)
 
     const newAdmin = await Hospital.create({
-      hosname,
+      username,
       email,
       password: dicreptedPassword,
 
@@ -107,7 +107,7 @@ const hospitalAdminLogin = async (
 
 const continueWithGoogle = async (req: Request, res: Response) => {
   try {
-    const { hosname, email, role, profilepic } = req.body
+    const { username, email, role, profilepic } = req.body
 
     const existHospital = await Hospital.findOne({ email })
 
@@ -138,7 +138,7 @@ const continueWithGoogle = async (req: Request, res: Response) => {
     const bcryptjsPassword = bcryptjs.hashSync(newPassword, 10)
 
     const newHospital = await Hospital.create({
-      hosname,
+      username,
       email,
       password: bcryptjsPassword,
       profilepic,

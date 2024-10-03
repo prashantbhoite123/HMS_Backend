@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose"
-import { IAppointment } from "../Types/HospitalTypes"
+import { IAppointment } from "../../Types/HospitalTypes"
 
 const AppointmentSchema: Schema = new Schema({
   patientName: {

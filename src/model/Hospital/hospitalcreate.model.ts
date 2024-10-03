@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose"
-import { IHospital } from "../Types/HospitalTypes"
+import { IHospital } from "../../Types/HospitalTypes"
 
 // Define the doctor schema
 const doctorSchema: Schema = new Schema({

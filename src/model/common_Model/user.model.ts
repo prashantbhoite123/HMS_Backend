@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 
 export interface Hospitaldocument extends Document {
   _id: any
-  hosname: string
+  username: string
   email: string
   password: string
   role: string
@@ -11,7 +11,7 @@ export interface Hospitaldocument extends Document {
 
 const hospitalRegistation = new mongoose.Schema(
   {
-    hosname: {
+    username: {
       type: String,
       required: true,
     },

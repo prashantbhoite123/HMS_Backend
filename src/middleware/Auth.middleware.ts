@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express"
 import { errorHandler } from "../utils/error.handler"
 import jwt from "jsonwebtoken"
-import { Hospital, Hospitaldocument } from "../model/hospital.user"
-import { AuthenticatedRequest } from "../types"
+import { Hospital, Hospitaldocument } from "../model/common_Model/user.model"
+import { AuthenticatedRequest } from "../Types/types"
 
 export const isAuthentication = async (
   req: AuthenticatedRequest,
@@ -11,7 +11,7 @@ export const isAuthentication = async (
 ) => {
   try {
     const { token } = req.cookies
-    console.log("this is a token==", token)
+
     if (!token) {
       return next(errorHandler(400, "You have login first"))
     }
