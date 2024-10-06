@@ -1,6 +1,6 @@
 import express from "express"
-import userAuthController from "../controllers/Comman_Controller/userAuth.controller"
-import { isAuthentication } from "../middleware/Auth.middleware"
+import userAuthController from "../../controllers/Comman_Controller/userAuth.controller"
+import { isAuthentication } from "../../middleware/Auth.middleware"
 
 const router = express.Router()
 
