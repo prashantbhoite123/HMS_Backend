@@ -4,7 +4,7 @@ import mongoose from "mongoose"
 import hospitalRoute from "./Routes/Common_Routes/Myhospital.route"
 import userRoute from "./Routes/Common_Routes/userAuth.routes"
 import hospitalcreate from "./Routes/Hospital_Routes/Hospital.routes"
-
+import { v2 as cloudinary } from "cloudinary"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import { errorMiddleware } from "./middleware/error.middleware"
@@ -26,6 +26,13 @@ mongoose
   })
   .then(() => console.log("Database connected successfully"))
   .catch((e) => console.log(`Error while database connection :${e}`))
+
+  
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+})
 
 app.get("/", (req: Request, res: Response) => {
   res.send("hello Prashant")
