@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express"
 import Hospital from "../../model/Hospital/hospitalcreate.model"
 import { AuthenticatedRequest } from "../../Types/types"
 import { errorHandler } from "../../utils/error.handler"
+import cloudinary from "cloudinary"
+import mongoose from "mongoose"
 const createHospital = async (
   req: AuthenticatedRequest,
   res: Response,
@@ -9,19 +11,40 @@ const createHospital = async (
 ) => {
   try {
     const _id = req.user?._id
-    const existHospital = await Hospital.findById({ owner: _id })
+    const existHospital = await Hospital.findOne({ owner: _id })
 
-    if (!existHospital) {
-      return next(errorHandler(400, "Hospital not found"))
+    if (existHospital) {
+      return next(errorHandler(400, "Hospital already exist"))
     }
 
-    const newHospital = await Hospital.create(req.body)
-    res.status(200).json(newHospital)
+    // if (!req.file) {
+    //   return res.status(400).json({ message: "picture file is required" })
+    // }
+
+    // const pictureUrl = await uploadImage(req.file as Express.Multer.File)
+
+    const hospital = new Hospital(req.body)
+
+    // hospital.picture = pictureUrl
+    hospital.owner = new mongoose.Types.ObjectId(req.user?._id)
+
+    await hospital.save()
+
+    res.status(200).json(hospital)
   } catch (error) {
     console.log(`Error while createhospital${error}`)
     next(error)
   }
 }
+
+// const uploadImage = async (file: Express.Multer.File) => {
+//   const image = file
+//   const base64Image = Buffer.from(image.buffer).toString("base64")
+//   const dataURI = `data:${image.mimetype};base64,${base64Image}`
+//   const uploadResponse = await cloudinary.v2.uploader.upload(dataURI)
+
+//   return uploadResponse.url
+// }
 
 export default {
   createHospital,
