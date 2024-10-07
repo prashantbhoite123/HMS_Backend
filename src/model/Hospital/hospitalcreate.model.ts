@@ -153,7 +153,7 @@ const HospitalSchema: Schema = new Schema<IHospital>({
   services: {
     type: [String],
   },
-  doctors: [doctorSchema],
+  doctors: [{ type: doctorSchema, required: true }],
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

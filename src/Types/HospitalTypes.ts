@@ -18,7 +18,7 @@ export interface IHospital extends Document {
     city: string
     state: string
     country: string
-  }
+  }[]
 
   hospitalType: string
   establishedDate?: Date
@@ -31,7 +31,7 @@ export interface IHospital extends Document {
     experienceYears: number
     specialization: string
     workingHours: string
-  }
+  }[]
   picture: string
   owner: mongoose.Types.ObjectId
   // New Fields

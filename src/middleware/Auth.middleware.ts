@@ -11,7 +11,7 @@ export const isAuthentication = async (
 ) => {
   try {
     const { token } = req.cookies
-
+    console.log("this is token====", token)
     if (!token) {
       return next(errorHandler(400, "You have login first"))
     }

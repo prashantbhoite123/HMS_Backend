@@ -12,8 +12,8 @@ const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cookieParser())
 
+app.use(cookieParser())
 app.use(
   cors({
     origin: "http://localhost:5173", // Your frontend URL
@@ -27,7 +27,6 @@ mongoose
   .then(() => console.log("Database connected successfully"))
   .catch((e) => console.log(`Error while database connection :${e}`))
 
-  
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
