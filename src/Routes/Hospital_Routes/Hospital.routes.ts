@@ -27,4 +27,5 @@ router.post(
   CreateHospital.createHospital
 )
 
+router.get("/gethospital", isAuthentication, CreateHospital.getMyhospital)
 export default router

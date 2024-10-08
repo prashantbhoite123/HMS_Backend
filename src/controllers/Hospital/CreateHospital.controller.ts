@@ -6,6 +6,27 @@ import cloudinary from "cloudinary"
 
 import mongoose from "mongoose"
 
+const getMyhospital = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const hospitalData = await Hospital.findOne({ owner: req.user?._id })
+
+    if (!hospitalData) {
+      return next(errorHandler(400, "hospital not found"))
+    }
+
+    res.status(200).json({ success: true, hospitalData })
+  } catch (error) {
+    console.log(`Error while get hospital ${error}`)
+    return res
+      .status(400)
+      .json({ messgae: "Something went wrong in getHospital api" })
+  }
+}
+
 const createHospital = async (
   req: AuthenticatedRequest,
   res: Response,
@@ -38,7 +59,10 @@ const createHospital = async (
 
     console.log("This is an hospital : ", hospital)
     await hospital.save()
-    res.status(200).json(hospital)
+
+    res
+      .status(200)
+      .json({ success: true, message: "Hospital create successfull", hospital })
   } catch (error) {
     console.log(`Error while createhospital${error}`)
     next(error)
@@ -55,5 +79,6 @@ const uploadImage = async (file: Express.Multer.File) => {
 }
 
 export default {
+  getMyhospital,
   createHospital,
 }
