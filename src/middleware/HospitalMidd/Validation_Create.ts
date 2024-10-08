@@ -83,12 +83,12 @@ export const validateHospital = [
     .isArray()
     .withMessage("Services must be an array"),
 
-  // Validate that doctors is an array
+  
   body("doctors")
     .isArray({ min: 1 })
     .withMessage("Doctors must be an array with at least one doctor"),
 
-  // Validate each doctor object in the doctors array
+  
   body("doctors.*.doctorName")
     .isString()
     .notEmpty()
