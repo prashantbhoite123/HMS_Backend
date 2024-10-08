@@ -38,7 +38,4 @@ const hospitalRegistation = new mongoose.Schema(
   { timestamps: true }
 )
 
-export const Hospital = mongoose.model<Hospitaldocument>(
-  "User",
-  hospitalRegistation
-)
+export const User = mongoose.model<Hospitaldocument>("User", hospitalRegistation)

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { errorHandler } from "../utils/error.handler"
 import jwt from "jsonwebtoken"
-import { Hospital, Hospitaldocument } from "../model/common_Model/user.model"
+import { User, Hospitaldocument } from "../model/common_Model/user.model"
 import { AuthenticatedRequest } from "../Types/types"
 
 export const isAuthentication = async (
@@ -11,8 +11,7 @@ export const isAuthentication = async (
 ) => {
   try {
     const { token } = req.cookies
-    console.log("this is token====", token)
-    if (!token) {
+    if (token === undefined || !token) {
       return next(errorHandler(400, "You have login first"))
     }
 
@@ -21,7 +20,7 @@ export const isAuthentication = async (
       process.env.SECRETKEY as string
     ) as jwt.JwtPayload
 
-    const user: Hospitaldocument | null = await Hospital.findById(decode._id)
+    const user: Hospitaldocument | null = await User.findById(decode._id)
 
     if (!user) {
       return errorHandler(400, "Hospital not found")

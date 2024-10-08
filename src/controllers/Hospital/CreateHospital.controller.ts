@@ -1,9 +1,11 @@
-import { NextFunction, Request, Response } from "express"
+import { NextFunction, Response } from "express"
 import Hospital from "../../model/Hospital/hospitalcreate.model"
 import { AuthenticatedRequest } from "../../Types/types"
 import { errorHandler } from "../../utils/error.handler"
 import cloudinary from "cloudinary"
+
 import mongoose from "mongoose"
+
 const createHospital = async (
   req: AuthenticatedRequest,
   res: Response,
@@ -21,21 +23,21 @@ const createHospital = async (
     if (!req.file) {
       return res.status(400).json({ message: "picture file is required" })
     }
-    const doctors = JSON.parse(req.body.doctors)
+    // const doctors = JSON.parse(req.body.doctors)
 
-    console.log("doctors ======", doctors)
+    // console.log("doctors ======", doctors)
     const pictureUrl = await uploadImage(req.file as Express.Multer.File)
 
     const hospital = new Hospital({
       ...req.body,
-      doctors: doctors,
+      // doctors: doctors,
     })
 
     hospital.picture = pictureUrl
     hospital.owner = new mongoose.Types.ObjectId(req.user?._id)
 
+    console.log("This is an hospital : ", hospital)
     await hospital.save()
-
     res.status(200).json(hospital)
   } catch (error) {
     console.log(`Error while createhospital${error}`)

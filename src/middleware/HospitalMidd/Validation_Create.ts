@@ -1,111 +1,113 @@
-import { NextFunction, Request, Response } from "express"
 import { body, validationResult } from "express-validator"
+import { Request, Response, NextFunction } from "express"
 
-const handleCreateHospitalError = (
+// Middleware to handle validation errors
+const handleValidationError = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const error = validationResult(req)
-  if (!error.isEmpty()) {
-    return res.status(400).json({ error: error.array() })
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() })
   }
   next()
 }
 
-export const validateCreateHospital = [
+export const parseDoctors = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const doctorsString = req.body.doctors
+
+  if (typeof doctorsString === "string") {
+    try {
+      req.body.doctors = JSON.parse(doctorsString)
+    } catch (err) {
+      return res.status(400).json({ error: "Invalid doctors array format" })
+    }
+  }
+
+  if (!Array.isArray(req.body.doctors)) {
+    return res.status(400).json({ error: "Doctors must be an array" })
+  }
+
+  next()
+}
+
+// Validation rules for doctors array within hospital
+export const validateHospital = [
   body("hospitalName")
-    .trim()
+    .isString()
     .notEmpty()
-    .withMessage("Hospital name must be a string"),
+    .withMessage("Hospital name is required and must be a string"),
   body("description")
-    .trim()
-    .notEmpty()
-    .withMessage("description must be a string"),
-
+    .optional()
+    .isString()
+    .withMessage("Description must be a string"),
+  body("picture").optional().isURL().withMessage("Picture must be a valid URL"),
   body("phoneNumber")
-    .trim()
-    .isLength({ min: 10, max: 10 })
-    .withMessage("Phone number must be 10 digits long")
-    .isMobilePhone("en-IN")
-    .withMessage("Please provide a valid Indian phone number"),
+    .isString()
+    .notEmpty()
+    .withMessage("Phone number is required and must be a string"),
   body("address.city")
-    .trim()
+    .isString()
     .notEmpty()
-    .withMessage("City is required")
-    .isLength({ min: 2 })
-    .withMessage("City must be at least 2 charactor long"),
+    .withMessage("City is required and must be a string"),
   body("address.state")
-    .trim()
+    .isString()
     .notEmpty()
-    .withMessage("State is required")
-    .isLength({ min: 2 })
-    .withMessage("State must be at least 2 charactor long"),
+    .withMessage("State is required and must be a string"),
   body("address.country")
-    .trim()
+    .isString()
     .notEmpty()
-    .withMessage("country is required")
-    .isLength({ min: 2 })
-    .withMessage("country must be at least 2 charactor long"),
+    .withMessage("Country is required and must be a string"),
   body("hospitalType")
-    .trim()
+    .isString()
     .notEmpty()
-    .withMessage("hospital type must be a string"),
+    .withMessage("Hospital type is required and must be a string"),
   body("establishedDate")
-    .trim()
-    .isDate({ format: "YYYY-MM-DD" }) // Validate format as YYYY-MM-DD
-    .withMessage("Please provide a valid date in YYYY-MM-DD format")
-    .custom((value) => {
-      const currentDate = new Date()
-      const inputDate = new Date(value)
-      if (inputDate > currentDate) {
-        throw new Error("Established date must be in the past")
-      }
-      return true
-    }),
+    .optional()
+    .isDate()
+    .withMessage("Established date must be a valid date"),
   body("totalBeds")
-    .trim()
-    .isInt({ min: 10 })
-    .notEmpty()
-    .withMessage("Total beds be a number and at least 10"),
+    .isInt({ min: 1 })
+    .withMessage("Total beds must be a positive integer"),
   body("departments")
-    .trim()
-    .notEmpty()
+    .optional()
     .isArray()
-    .withMessage("departments must be a string"),
+    .withMessage("Departments must be an array"),
   body("services")
-    .trim()
-    .notEmpty()
+    .optional()
     .isArray()
-    .withMessage("services must be a string"),
-  body("doctors.doctorName")
-    .trim()
-    .notEmpty()
-    .withMessage("Doctorname must be string"),
-  body("doctors.education")
-    .trim()
-    .notEmpty()
-    .withMessage("education must be string"),
+    .withMessage("Services must be an array"),
 
-  body("doctors.experienceYears")
-    .trim()
-    .isNumeric()
-    .notEmpty()
-    .withMessage("experienceYears must be number"),
-  body("doctors.specialization")
-    .trim()
+  // Validate that doctors is an array
+  body("doctors")
+    .isArray({ min: 1 })
+    .withMessage("Doctors must be an array with at least one doctor"),
+
+  // Validate each doctor object in the doctors array
+  body("doctors.*.doctorName")
     .isString()
     .notEmpty()
-    .withMessage("specialization must be string"),
-  body("doctors.workingHours")
-    .trim()
+    .withMessage("Doctor name is required and must be a string"),
+  body("doctors.*.education")
     .isString()
     .notEmpty()
-    .withMessage("workingHours must be string"),
-  body("picture")
-    .isURL()
-    .trim()
+    .withMessage("Doctor education is required and must be a string"),
+  body("doctors.*.experienceYears")
+    .isInt({ min: 0 })
+    .withMessage("Doctor experience years must be a non-negative integer"),
+  body("doctors.*.specialization")
+    .isString()
     .notEmpty()
-    .withMessage("Picture must be valid url"),
-  handleCreateHospitalError,
+    .withMessage("Doctor specialization is required and must be a string"),
+  body("doctors.*.workingHours")
+    .isString()
+    .notEmpty()
+    .withMessage("Working hours are required and must be a string"),
+
+  handleValidationError,
 ]

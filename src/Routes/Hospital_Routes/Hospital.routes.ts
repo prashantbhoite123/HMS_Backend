@@ -2,7 +2,10 @@ import express from "express"
 import CreateHospital from "../../controllers/Hospital/CreateHospital.controller"
 import { isAuthentication } from "../../middleware/Auth.middleware"
 import multer from "multer"
-// import { validateCreateHospital } from "../../middleware/HospitalMidd/Validation_Create"
+import {
+  parseDoctors,
+  validateHospital,
+} from "../../middleware/HospitalMidd/Validation_Create"
 
 const router = express.Router()
 
@@ -19,7 +22,8 @@ router.post(
   "/createhospital",
   upload.single("picture"),
   isAuthentication,
-  // validateCreateHospital,
+  parseDoctors,
+  validateHospital,
   CreateHospital.createHospital
 )
 

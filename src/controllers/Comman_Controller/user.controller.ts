@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import bcryptjs from "bcryptjs"
 import jwt from "jsonwebtoken"
-import { Hospital } from "../../model/common_Model/user.model"
+import { User } from "../../model/common_Model/user.model"
 import { errorHandler } from "../../utils/error.handler"
 import { AuthenticatedRequest } from "../../Types/types"
 
@@ -21,7 +21,7 @@ const getUser = async (
   try {
     const _id = req.user?._id
     console.log(req.user)
-    const existuser = await Hospital.findById(_id)
+    const existuser = await User.findById(_id)
 
     if (!existuser) {
       return next(errorHandler(400, "User does no exist"))
@@ -43,7 +43,7 @@ const userRegistration = async (req: Request, res: Response) => {
     if (!password || !username || !email || !role) {
       return res.status(400).json({ message: "All field are required" })
     }
-    const existingAdmin = await Hospital.findOne({ email })
+    const existingAdmin = await User.findOne({ email })
 
     if (existingAdmin) {
       return res.status(404).json({ message: "Hos User already exist" })
@@ -51,7 +51,7 @@ const userRegistration = async (req: Request, res: Response) => {
 
     const dicreptedPassword = bcryptjs.hashSync(password, 10)
 
-    const newAdmin = await Hospital.create({
+    const newAdmin = await User.create({
       username,
       email,
       password: dicreptedPassword,
@@ -68,17 +68,13 @@ const userRegistration = async (req: Request, res: Response) => {
   }
 }
 
-const userLogin = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const userLogin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body
     if (!email || !password || email === "" || password === "") {
       next(errorHandler(400, "All field are required"))
     }
-    const existHospital = await Hospital.findOne({ email })
+    const existHospital = await User.findOne({ email })
     if (!existHospital) {
       return errorHandler(400, "User not found")
     }
@@ -109,7 +105,7 @@ const continueWithGoogle = async (req: Request, res: Response) => {
   try {
     const { username, email, role, profilepic } = req.body
 
-    const existHospital = await Hospital.findOne({ email })
+    const existHospital = await User.findOne({ email })
 
     if (existHospital) {
       const token = jwt.sign(
@@ -137,7 +133,7 @@ const continueWithGoogle = async (req: Request, res: Response) => {
 
     const bcryptjsPassword = bcryptjs.hashSync(newPassword, 10)
 
-    const newHospital = await Hospital.create({
+    const newHospital = await User.create({
       username,
       email,
       password: bcryptjsPassword,
