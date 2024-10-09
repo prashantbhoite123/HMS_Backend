@@ -11,14 +11,15 @@ const getMyhospital = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log("======= backend come")
   try {
     const hospitalData = await Hospital.findOne({ owner: req.user?._id })
-
+    console.log("this is a id===", req.user?._id)
     if (!hospitalData) {
       return next(errorHandler(400, "hospital not found"))
     }
-
-    res.status(200).json({ success: true, hospitalData })
+    console.log("get hospital data", hospitalData)
+    res.status(200).json(hospitalData)
   } catch (error) {
     console.log(`Error while get hospital ${error}`)
     return res
