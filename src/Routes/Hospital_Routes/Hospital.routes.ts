@@ -26,6 +26,14 @@ router.post(
   validateHospital,
   CreateHospital.createHospital
 )
+router.put(
+  "/updatehospital",
+  upload.single("picture"),
+  isAuthentication,
+  parseDoctors,
+  validateHospital,
+  CreateHospital.updateHospital
+)
 
 router.get("/gethospital", isAuthentication, CreateHospital.getMyhospital)
 export default router

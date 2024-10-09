@@ -70,6 +70,40 @@ const createHospital = async (
   }
 }
 
+const updateHospital = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const hospital = await Hospital.findOne({ owner: req.user?._id })
+
+    if (!hospital) {
+      return next(errorHandler(400, "Hospital not found"))
+    }
+
+    hospital.hospitalName = req.body?.hospitalName
+    hospital.description = req.body?.description
+    hospital.phoneNumber = req.body?.description
+    hospital.address = req.body?.address
+    hospital.hospitalType = req.body?.hospitalType
+    hospital.establishedDate = req.body?.establishedDate
+    hospital.totalBeds = req.body?.totalBeds
+    hospital.departments = req.body?.departments
+    hospital.services = req.body?.services
+    hospital.doctors = req.body?.doctors
+
+    if (req.file) {
+      const picture = await uploadImage(req.file as Express.Multer.File)
+      hospital.picture = picture
+    }
+
+    await hospital.save()
+    res.status(200).send(hospital)
+  } catch (error) {
+    console.log(`Error while update Hospital :${error}`)
+  }
+}
 const uploadImage = async (file: Express.Multer.File) => {
   const image = file
   const base64Image = Buffer.from(image.buffer).toString("base64")
@@ -80,6 +114,7 @@ const uploadImage = async (file: Express.Multer.File) => {
 }
 
 export default {
-  getMyhospital,
   createHospital,
+  getMyhospital,
+  updateHospital,
 }
