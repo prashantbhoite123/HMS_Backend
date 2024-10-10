@@ -11,14 +11,12 @@ const getMyhospital = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("======= backend come")
   try {
     const hospitalData = await Hospital.findOne({ owner: req.user?._id })
-    console.log("this is a id===", req.user?._id)
+    console.log("Get My Hospital : : :", hospitalData)
     if (!hospitalData) {
       return next(errorHandler(400, "hospital not found"))
     }
-    console.log("get hospital data", hospitalData)
     res.status(200).json(hospitalData)
   } catch (error) {
     console.log(`Error while get hospital ${error}`)
@@ -34,7 +32,6 @@ const createHospital = async (
   next: NextFunction
 ) => {
   try {
-    console.log("=====", req.body)
     const _id = req.user?._id
     const existHospital = await Hospital.findOne({ owner: _id })
 
@@ -45,9 +42,7 @@ const createHospital = async (
     if (!req.file) {
       return res.status(400).json({ message: "picture file is required" })
     }
-    // const doctors = JSON.parse(req.body.doctors)
 
-    // console.log("doctors ======", doctors)
     const pictureUrl = await uploadImage(req.file as Express.Multer.File)
 
     const hospital = new Hospital({
@@ -76,15 +71,18 @@ const updateHospital = async (
   next: NextFunction
 ) => {
   try {
-    // console.log(req.body)
     const hospital = await Hospital.findOne({ owner: req.user?._id })
 
     if (!hospital) {
       return next(errorHandler(400, "Hospital not found"))
     }
+    if (req.file) {
+      const picture = await uploadImage(req.file as Express.Multer.File)
+      req.body.picture = picture
+    }
 
-    const updatedHospital = new Hospital({
-      ...req.body,
+    const updatedHospital = await Hospital.findByIdAndUpdate(hospital.id, {
+      $set: { ...req.body },
     })
 
     // hospital.hospitalName = req.body?.hospitalName
@@ -98,18 +96,15 @@ const updateHospital = async (
     // hospital.services = req.body?.services
     // hospital.doctors = req.body?.doctors
     // hospital.picture = req.body?.picture
-    if (req.file) {
-      const picture = await uploadImage(req.file as Express.Multer.File)
-      updatedHospital.picture = picture
-    }
 
-    await updatedHospital.save()
-    console.log(updateHospital)
+    console.log("update hospital===", updatedHospital)
     res.status(200).send(updatedHospital)
   } catch (error) {
+    next(error)
     console.log(`Error while update Hospital :${error}`)
   }
 }
+
 const uploadImage = async (file: Express.Multer.File) => {
   const image = file
   const base64Image = Buffer.from(image.buffer).toString("base64")

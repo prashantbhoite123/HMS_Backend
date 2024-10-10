@@ -15,7 +15,7 @@ export const isAuthentication = async (
       return next(errorHandler(400, "You have login first"))
     }
 
-    console.log("token", token)
+    
     const decode = jwt.verify(
       token,
       process.env.SECRETKEY as string
