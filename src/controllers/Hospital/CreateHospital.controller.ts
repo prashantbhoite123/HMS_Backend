@@ -13,7 +13,7 @@ const getMyhospital = async (
 ) => {
   try {
     const hospitalData = await Hospital.findOne({ owner: req.user?._id })
-    console.log("Get My Hospital : : :", hospitalData)
+    
     if (!hospitalData) {
       return next(errorHandler(400, "hospital not found"))
     }
@@ -47,13 +47,13 @@ const createHospital = async (
 
     const hospital = new Hospital({
       ...req.body,
-      // doctors: doctors,
+      
     })
 
     hospital.picture = pictureUrl
     hospital.owner = new mongoose.Types.ObjectId(req.user?._id)
 
-    console.log("This is an hospital : ", hospital)
+    
     await hospital.save()
 
     res
@@ -85,19 +85,9 @@ const updateHospital = async (
       $set: { ...req.body },
     })
 
-    // hospital.hospitalName = req.body?.hospitalName
-    // hospital.description = req.body?.description
-    // hospital.phoneNumber = req.body?.description
-    // hospital.address = req.body?.address
-    // hospital.hospitalType = req.body?.hospitalType
-    // hospital.establishedDate = req.body?.establishedDate
-    // hospital.totalBeds = req.body?.totalBeds
-    // hospital.departments = req.body?.departments
-    // hospital.services = req.body?.services
-    // hospital.doctors = req.body?.doctors
-    // hospital.picture = req.body?.picture
 
-    console.log("update hospital===", updatedHospital)
+
+    
     res.status(200).send(updatedHospital)
   } catch (error) {
     next(error)
