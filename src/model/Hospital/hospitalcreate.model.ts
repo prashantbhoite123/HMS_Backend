@@ -139,7 +139,7 @@ const HospitalSchema: Schema = new Schema<IHospital>({
     required: true,
     trim: true,
   },
-  establishedDate: {
+   establishedDate: {
     type: Date,
     required: false,
   },
