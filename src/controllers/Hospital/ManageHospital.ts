@@ -21,6 +21,59 @@ const getallHospital = async (
   }
 }
 
+const searchHospital = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const city = req.params.city
+    const searchQuery = (req.query.searchQuery as string) || " "
+    const departments = (req.query.departments as string) || ""
+    const sortOption = (req.query.sortOption as string) || "lastUpdated"
+    const totalBeds = (req.query.totalBeds as string) || 1
+    const page = parseInt(req.query.page as string) || 1
+
+    let query: any = {}
+
+    query["city"] = new RegExp(city, "i")
+    const cityCheck = await Hospital.countDocuments(query)
+
+    if (cityCheck === 0) {
+      return res.status(404).json([])
+    }
+    if (departments) {
+      const departmentArray = departments
+        .split(",")
+        .map((department) => new RegExp(department, "i"))
+
+      query["departments"] = { $all: departmentArray }
+    }
+
+    if (searchQuery) {
+      const searchRegex = new RegExp(searchQuery, "i")
+      query["$or"] = [
+        { hospitalName: searchRegex },
+        { departments: { $in: [searchRegex] } },
+      ]
+    }
+
+    if (totalBeds) {
+      query["totalBeds"] = { $gte: totalBeds }
+    }
+
+    const pageSize = 10
+    const skip = (page - 1) * pageSize
+    const hospitals = await Hospital.find(query)
+      .sort({ [sortOption]: -1 })
+      .skip(skip)
+      .limit(pageSize)
+  } catch (error) {
+    return next(errorHandler(400, "faild to search"))
+  }
+}
+
 export default {
   getallHospital,
+  searchHospital,
 }
