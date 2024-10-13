@@ -28,6 +28,8 @@ const searchHospital = async (
 ) => {
   try {
     const city = req.params.city
+
+    console.log("============", city)
     const searchQuery = (req.query.searchQuery as string) || " "
     const departments = (req.query.departments as string) || ""
     const sortOption = (req.query.sortOption as string) || "lastUpdated"
@@ -37,11 +39,17 @@ const searchHospital = async (
 
     let query: any = {}
 
-    query["city"] = new RegExp(city, "i")
+    query["address.city"] = new RegExp(city, "i")
     const cityCheck = await Hospital.countDocuments(query)
+    console.log("-----------", cityCheck)
 
     if (cityCheck === 0) {
-      return res.status(404).json([])
+      return res.status(404).json({
+        data: [],
+        total: 0,
+        page: 1,
+        pages: 1,
+      })
     }
     if (departments) {
       const departmentArray = departments
