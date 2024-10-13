@@ -31,7 +31,8 @@ const searchHospital = async (
     const searchQuery = (req.query.searchQuery as string) || " "
     const departments = (req.query.departments as string) || ""
     const sortOption = (req.query.sortOption as string) || "lastUpdated"
-    const totalBeds = (req.query.totalBeds as string) || 1
+    const totalBeds = parseInt(req.query.totalBeds as string) || 1
+    const hospitaltype = (req.query.hospitaltype as string) || ""
     const page = parseInt(req.query.page as string) || 1
 
     let query: any = {}
@@ -54,6 +55,7 @@ const searchHospital = async (
       const searchRegex = new RegExp(searchQuery, "i")
       query["$or"] = [
         { hospitalName: searchRegex },
+        { hospitaltype: searchRegex },
         { departments: { $in: [searchRegex] } },
       ]
     }
@@ -62,12 +64,30 @@ const searchHospital = async (
       query["totalBeds"] = { $gte: totalBeds }
     }
 
-    const pageSize = 10
+    if (hospitaltype) {
+      query["hospitalType"] = new RegExp(hospitaltype, "i")
+    }
+
+    const pageSize = 5
     const skip = (page - 1) * pageSize
     const hospitals = await Hospital.find(query)
       .sort({ [sortOption]: -1 })
       .skip(skip)
       .limit(pageSize)
+      .lean()
+
+    const total = await Hospital.countDocuments(query)
+
+    const response = {
+      data: hospitals,
+      pagination: {
+        total,
+        page,
+        pages: Math.ceil(total / pageSize),
+      },
+    }
+
+    res.json(response)
   } catch (error) {
     return next(errorHandler(400, "faild to search"))
   }

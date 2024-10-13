@@ -34,5 +34,6 @@ export interface IHospital extends Document {
   }[]
   picture: string
   owner: mongoose.Types.ObjectId
+  lastUpdated: Date
   // New Fields
 }
