@@ -28,6 +28,8 @@ mongoose
   .then(() => console.log("Database connected successfully"))
   .catch((e) => console.log(`Error while database connection :${e}`))
 
+console.log(process.env.MONGODB_URL)
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,

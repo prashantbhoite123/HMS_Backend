@@ -5,14 +5,6 @@ import { param } from "express-validator"
 const router = express.Router()
 
 router.get("/gethospitals", isAuthentication, ManageHospital.getallHospital)
-router.get(
-  "/search/:city",
-  param("city")
-    .isString()
-    .trim()
-    .notEmpty()
-    .withMessage("city parameter must be a valid string"),
-  ManageHospital.searchHospital
-)
+router.get("/search/", isAuthentication, ManageHospital.searchHospital)
 
 export default router

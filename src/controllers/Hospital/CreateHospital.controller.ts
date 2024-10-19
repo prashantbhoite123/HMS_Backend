@@ -32,9 +32,10 @@ const createHospital = async (
   next: NextFunction
 ) => {
   try {
+    console.log(req.body)
     const _id = req.user?._id
     const existHospital = await Hospital.findOne({ owner: _id })
-
+    console.log(existHospital)
     if (existHospital) {
       return next(errorHandler(400, "Hospital already exist"))
     }
@@ -52,13 +53,13 @@ const createHospital = async (
     hospital.picture = pictureUrl
     hospital.owner = new mongoose.Types.ObjectId(req.user?._id)
 
+    console.log("this is a hospital=====>", hospital)
     await hospital.save()
-
     res
       .status(200)
       .json({ success: true, message: "Hospital create successfull", hospital })
-  } catch (error) {
-    console.log(`Error while createhospital${error}`)
+  } catch (error: any) {
+    console.log(`Error while createhospital${error.message}`)
     next(error)
   }
 }
@@ -79,11 +80,10 @@ const updateHospital = async (
       req.body.picture = picture
     }
 
-    const updatedHospital = await Hospital.create(req.body)
-
-    // const updatedHospital = await Hospital.findByIdAndUpdate(hospital.id, {
-    //   $set: { ...req.body },
-    // })
+    // const updatedHospital = await Hospital.create(req.body)
+    const updatedHospital = await Hospital.findByIdAndUpdate(hospital.id, {
+      $set: { ...req.body },
+    })
 
     res.status(200).send(updatedHospital)
   } catch (error) {

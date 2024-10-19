@@ -158,7 +158,6 @@ const HospitalSchema: Schema = new Schema<IHospital>(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    lastUpdated: { type: Date, required: true },
   },
   { timestamps: true }
 )

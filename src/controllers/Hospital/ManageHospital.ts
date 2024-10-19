@@ -27,8 +27,6 @@ const searchHospital = async (
   next: NextFunction
 ) => {
   try {
-    const city = req.params.city
-
     const searchQuery = (req.query.searchQuery as string) || " "
     const departments = (req.query.departments as string) || ""
     const sortOption = (req.query.sortOption as string) || "lastUpdated"
@@ -56,8 +54,8 @@ const searchHospital = async (
       query["departments"] = { $all: departmentArray }
     }
 
-    if (city) {
-      const searchRegex = new RegExp(city, "i")
+    if (searchQuery) {
+      const searchRegex = new RegExp(searchQuery, "i")
       query["$or"] = [
         { hospitalName: searchRegex },
         { hospitaltype: searchRegex },
