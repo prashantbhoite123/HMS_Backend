@@ -6,5 +6,6 @@ const router = express.Router()
 
 router.get("/gethospitals", isAuthentication, ManageHospital.getallHospital)
 router.get("/search/", isAuthentication, ManageHospital.searchHospital)
+router.get("/:hospitalid")
 
 export default router

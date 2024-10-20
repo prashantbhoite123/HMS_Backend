@@ -97,7 +97,32 @@ const searchHospital = async (
   }
 }
 
+const getRestaurant = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { hospitalid } = req.params
+
+    if (!hospitalid) {
+      return next(errorHandler(404, "hospital id not found"))
+    }
+
+    const hospital = await Hospital.findById(hospitalid)
+    if (!hospital) {
+      return next(errorHandler(404, "Hospital not found"))
+    }
+
+    return res.status(200).json(hospital)
+  } catch (error) {
+    console.log(`Error while getRestaurant  :${error}`)
+    return next(error)
+  }
+}
+
 export default {
   getallHospital,
   searchHospital,
+  getRestaurant,
 }
