@@ -104,12 +104,15 @@ const getRestaurant = async (
 ) => {
   try {
     const { hospitalid } = req.params
+    console.log("hospital ID==>", hospitalid)
 
     if (!hospitalid) {
       return next(errorHandler(404, "hospital id not found"))
     }
 
     const hospital = await Hospital.findById(hospitalid)
+
+    console.log("hospital", hospital)
     if (!hospital) {
       return next(errorHandler(404, "Hospital not found"))
     }
