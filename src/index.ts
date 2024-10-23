@@ -43,7 +43,7 @@ app.get("/", (req: Request, res: Response) => {
 
 // Common Routes//
 app.use("/api/hospital", hospitalRoute)
-app.use("/api/auth", userRoute)
+app.use("/api/auth", userRoute) 
 
 // Hospital Route//
 app.use("/api/my/hospital", hospitalcreate)
