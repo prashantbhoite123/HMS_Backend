@@ -6,6 +6,6 @@ import { sendDynamicEmail } from "../../controllers/Comman_Controller/mailer.con
 const router = express.Router()
 
 router.get("/logout", isAuthentication, userAuthController.logoutUser)
-router.post("/send-email", sendDynamicEmail)
+router.post("/send-email", isAuthentication, sendDynamicEmail)
 
 export default router

@@ -10,6 +10,10 @@ const patientAppoinment = async (
   next: NextFunction
 ) => {
   try {
+    console.log("appoinment", req.body)
+    if (!req.body) {
+      return next(errorHandler(404, "all field are required"))
+    }
     const appoinment = await Appointment.findById(req.body.petientId)
 
     if (appoinment?.status === "Pending") {
@@ -17,8 +21,7 @@ const patientAppoinment = async (
     }
 
     const newAppoinment = await Appointment.create(req.body)
-    if (newAppoinment) {
-    }
+
     return res
       .status(200)
       .json({ message: "Appoinment book successFully", newAppoinment })
