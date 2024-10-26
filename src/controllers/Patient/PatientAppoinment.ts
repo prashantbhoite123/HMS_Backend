@@ -3,6 +3,7 @@ import { AuthenticatedRequest } from "../../Types/types"
 import { Appointment } from "../../model/Patient/Appointment"
 import { errorHandler } from "../../utils/error.handler"
 import { sendMail } from "../../utils/mailer"
+import { param } from "express-validator"
 
 const patientAppoinment = async (
   req: AuthenticatedRequest,
@@ -10,22 +11,26 @@ const patientAppoinment = async (
   next: NextFunction
 ) => {
   try {
+    const { hospitalId } = req.params
+    console.log("hospital id", hospitalId)
     if (!req.body) {
       return next(errorHandler(404, "all field are required"))
     }
 
-    console.log("this is patient id==>", req.user?._id)
-    const patientId = req.user?._id
-    const appoinment = await Appointment.findOne({
-      patientId: patientId as string,
-    })
+    const petientId = req.user?._id
+
+    const appoinment = await Appointment.findOne({ petientId: petientId })
     console.log(appoinment)
-    if (appoinment?.status === "Pending") {
+    if (appoinment) {
       return next(errorHandler(500, "Your appoinment alreday pending"))
     }
 
-    const newAppoinment = await Appointment.create(req.body)
-
+    const newAppoinment = await Appointment.create({
+      ...req.body,
+      petientId: petientId,
+      hospitalId,
+    })
+    console.log("this new app->", newAppoinment)
     return res
       .status(200)
       .json({ message: "Appoinment book successFully", newAppoinment })

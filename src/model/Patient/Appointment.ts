@@ -9,10 +9,12 @@ const AppointmentSchema: Schema = new Schema({
   petientId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
   hospitalId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Hospital",
+    required: true,
   },
   doctorName: {
     type: String,
