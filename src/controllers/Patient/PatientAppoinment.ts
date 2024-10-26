@@ -10,12 +10,16 @@ const patientAppoinment = async (
   next: NextFunction
 ) => {
   try {
-    console.log("appoinment", req.body)
     if (!req.body) {
       return next(errorHandler(404, "all field are required"))
     }
-    const appoinment = await Appointment.findById(req.body.petientId)
 
+    console.log("this is patient id==>", req.user?._id)
+    const patientId = req.user?._id
+    const appoinment = await Appointment.findOne({
+      patientId: patientId as string,
+    })
+    console.log(appoinment)
     if (appoinment?.status === "Pending") {
       return next(errorHandler(500, "Your appoinment alreday pending"))
     }
