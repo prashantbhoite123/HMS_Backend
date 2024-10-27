@@ -14,8 +14,8 @@ const createTransporter = (user: string, pass: string) => {
 };
 
 export const sendMail = async (
-  from: string,
-  to: string,
+  from: string |undefined,
+  to: string |undefined,
   subject: string,
   text: string,
   html?: string,

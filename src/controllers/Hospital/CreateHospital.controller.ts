@@ -32,6 +32,7 @@ const createHospital = async (
   next: NextFunction
 ) => {
   try {
+    const { ownerId } = req.params
     console.log(req.body)
     const _id = req.user?._id
     const existHospital = await Hospital.findOne({ owner: _id })
@@ -48,6 +49,7 @@ const createHospital = async (
 
     const hospital = new Hospital({
       ...req.body,
+      owner: ownerId,
     })
 
     hospital.picture = pictureUrl

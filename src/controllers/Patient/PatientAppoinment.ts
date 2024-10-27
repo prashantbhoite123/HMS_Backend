@@ -5,6 +5,7 @@ import { errorHandler } from "../../utils/error.handler"
 import { sendMail } from "../../utils/mailer"
 import { param } from "express-validator"
 import Hospital from "../../model/Hospital/hospitalcreate.model"
+import { User } from "../../model/common_Model/user.model"
 
 const patientAppoinment = async (
   req: AuthenticatedRequest,
@@ -29,7 +30,22 @@ const patientAppoinment = async (
       hospitalId,
     })
 
-    console.log(req.hUser)
+    console.log(newAppoinment)
+
+    const hospitalemail = await Hospital.findById(newAppoinment.hospitalId)
+    console.log(hospitalemail)
+    const hosEmail = await User.findById(hospitalemail?.owner)
+    const patientEmail = await User.findById(newAppoinment.petientId)
+
+    console.log("this is a patient user", patientEmail)
+    sendMail(
+      hosEmail?.email,
+      patientEmail?.email,
+      "Appoinement",
+      "Appinment book successfull",
+      process.env.EMAIL_USER,
+      process.env.EMAIL_PASS
+    )
     return res.status(200).json({
       success: true,
       message: "Appoinment book successFully",

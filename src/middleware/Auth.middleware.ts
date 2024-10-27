@@ -25,12 +25,8 @@ export const isAuthentication = async (
     if (!user) {
       return errorHandler(400, "Hospital not found")
     }
-
-    if (user.role) {
-      req.hUser = user
-    } else {
       req.user = user
-    }
+    
     next()
   } catch (error) {
     console.log(`Error while isAuthentication :${error}`)

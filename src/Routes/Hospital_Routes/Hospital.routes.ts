@@ -19,7 +19,7 @@ const upload = multer({
 })
 
 router.post(
-  "/createhospital",
+  "/createhospital/:ownerId",
   upload.single("picture"),
   isAuthentication,
   parseDoctors,
