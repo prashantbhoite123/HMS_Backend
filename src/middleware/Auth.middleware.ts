@@ -15,7 +15,6 @@ export const isAuthentication = async (
       return next(errorHandler(400, "You have login first"))
     }
 
-    
     const decode = jwt.verify(
       token,
       process.env.SECRETKEY as string
@@ -26,7 +25,12 @@ export const isAuthentication = async (
     if (!user) {
       return errorHandler(400, "Hospital not found")
     }
-    req.user = user
+
+    if (user.role) {
+      req.hUser = user
+    } else {
+      req.user = user
+    }
     next()
   } catch (error) {
     console.log(`Error while isAuthentication :${error}`)

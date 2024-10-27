@@ -4,6 +4,7 @@ import { Appointment } from "../../model/Patient/Appointment"
 import { errorHandler } from "../../utils/error.handler"
 import { sendMail } from "../../utils/mailer"
 import { param } from "express-validator"
+import Hospital from "../../model/Hospital/hospitalcreate.model"
 
 const patientAppoinment = async (
   req: AuthenticatedRequest,
@@ -21,19 +22,19 @@ const patientAppoinment = async (
 
     const appoinment = await Appointment.findOne({ petientId: petientId })
     console.log(appoinment)
-    if (appoinment) {
-      return next(errorHandler(500, "Your appoinment alreday pending"))
-    }
 
     const newAppoinment = await Appointment.create({
       ...req.body,
       petientId: petientId,
       hospitalId,
     })
-    console.log("this new app->", newAppoinment)
-    return res
-      .status(200)
-      .json({ message: "Appoinment book successFully", newAppoinment })
+
+    console.log(req.hUser)
+    return res.status(200).json({
+      success: true,
+      message: "Appoinment book successFully",
+      newAppoinment,
+    })
   } catch (error: any) {
     console.log(`Error while patient appoinment :${error}`)
     return next(error)

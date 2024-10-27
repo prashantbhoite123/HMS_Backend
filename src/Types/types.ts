@@ -4,6 +4,7 @@ import { Hospitaldocument } from "../model/common_Model/user.model"
 
 export interface AuthenticatedRequest extends Request {
   user?: Hospitaldocument | null
+  hUser?: Hospitaldocument | null
 }
 
 export interface CustomError {
