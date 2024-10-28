@@ -10,4 +10,6 @@ router.post(
   PatientAppoinment.patientAppoinment
 )
 
+router.get("/getallappinment", PatientAppoinment.getAllAppoinment)
+
 export default router

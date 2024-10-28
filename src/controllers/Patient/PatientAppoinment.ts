@@ -60,6 +60,25 @@ const patientAppoinment = async (
   }
 }
 
+const getAllAppoinment = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const allAppoinment = await Appointment.find({ petientId: req.user?._id })
+    if (!allAppoinment) {
+      return next(errorHandler(404, "appoinment  does not exist"))
+    }
+
+    return res.status(200).json(allAppoinment)
+  } catch (error: any) {
+    console.log("something went wrong")
+    return next(error)
+  }
+}
+
 export default {
   patientAppoinment,
+  getAllAppoinment,
 }
