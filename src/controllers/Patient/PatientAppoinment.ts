@@ -40,9 +40,12 @@ const patientAppoinment = async (
     console.log("this is a patient user", patientEmail)
     sendMail(
       hosEmail?.email,
+      // "pbhoite985@gmail.com",
       patientEmail?.email,
+      // "bhoitep326@gmail.com",
       "Appoinement",
       "Appinment book successfull",
+      "",
       process.env.EMAIL_USER,
       process.env.EMAIL_PASS
     )
