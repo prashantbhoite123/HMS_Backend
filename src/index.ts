@@ -6,6 +6,7 @@ import userRoute from "./Routes/Common_Routes/userAuth.routes"
 import hospitalcreate from "./Routes/Hospital_Routes/Hospital.routes"
 import manageHospitalRoute from "./Routes/Hospital_Routes/ManageHospital.routes"
 import appoinmentRoute from "./Routes/Patient_Route/Appoinment.routes"
+import manAppoinmentRoute from "./Routes/Patient_Route/ManAppoinment.routes"
 import { v2 as cloudinary } from "cloudinary"
 import cors from "cors"
 import cookieParser from "cookie-parser"
@@ -43,12 +44,13 @@ app.get("/", (req: Request, res: Response) => {
 
 // Common Routes//
 app.use("/api/hospital", hospitalRoute)
-app.use("/api/auth", userRoute) 
+app.use("/api/auth", userRoute)
 
 // Hospital Route//
 app.use("/api/my/hospital", hospitalcreate)
 app.use("/api/manage", manageHospitalRoute)
 app.use("/api/appoinment", appoinmentRoute)
+app.use("/api/manappoinemt", manAppoinmentRoute)
 
 app.use(errorMiddleware)
 app.listen(process.env.PORT, () => {

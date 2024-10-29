@@ -78,6 +78,7 @@ const getAllAppoinment = async (
   }
 }
 
+
 export default {
   patientAppoinment,
   getAllAppoinment,
