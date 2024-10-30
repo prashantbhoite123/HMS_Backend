@@ -3,6 +3,37 @@ import { AuthenticatedRequest } from "../../Types/types"
 import { errorHandler } from "../../utils/error.handler"
 import { Appointment } from "../../model/Patient/Appointment"
 
+const updateAppoinment = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { updatedAppId } = req.params
+    if (!updatedAppId) {
+      return next(errorHandler(404, "updatedappId not found"))
+    }
+
+    const updatedAppoinment = await Appointment.findByIdAndUpdate(
+      updatedAppId,
+      {
+        $set: {
+          ...req.body,
+        },
+      }
+    )
+
+    if (!updatedAppoinment) {
+      return next(errorHandler(404, "appoinment not found"))
+    }
+
+    return res.status(200).json({ message: "appoinment updated successfull" })
+  } catch (error) {
+    console.log("Something went wrong")
+    return next(error)
+  }
+}
+
 const deleteAppoinment = async (
   req: AuthenticatedRequest,
   res: Response,
@@ -33,4 +64,5 @@ const deleteAppoinment = async (
 
 export default {
   deleteAppoinment,
+  updateAppoinment,
 }

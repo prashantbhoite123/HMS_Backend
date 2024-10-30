@@ -5,8 +5,14 @@ const router = express.Router()
 
 router.delete(
   "/delapp/:appId",
-  // isAuthentication,
+  isAuthentication,
   ManageAppoinment.deleteAppoinment
+)
+
+router.put(
+  "/update/:updatedAppId",
+  isAuthentication,
+  ManageAppoinment.updateAppoinment
 )
 
 export default router
