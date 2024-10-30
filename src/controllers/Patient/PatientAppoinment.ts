@@ -14,7 +14,7 @@ const patientAppoinment = async (
 ) => {
   try {
     const { hospitalId } = req.params
-    console.log("hospital id", hospitalId)
+
     if (!req.body) {
       return next(errorHandler(404, "all field are required"))
     }
@@ -22,7 +22,6 @@ const patientAppoinment = async (
     const petientId = req.user?._id
 
     const appoinment = await Appointment.findOne({ petientId: petientId })
-    console.log(appoinment)
 
     const newAppoinment = await Appointment.create({
       ...req.body,
@@ -33,11 +32,10 @@ const patientAppoinment = async (
     console.log(newAppoinment)
 
     const hospitalemail = await Hospital.findById(newAppoinment.hospitalId)
-    console.log(hospitalemail)
+
     const hosEmail = await User.findById(hospitalemail?.owner)
     const patientEmail = await User.findById(newAppoinment.petientId)
 
-    console.log("this is a patient user", patientEmail)
     sendMail(
       hosEmail?.email,
       // "pbhoite985@gmail.com",
@@ -67,6 +65,7 @@ const getAllAppoinment = async (
 ) => {
   try {
     const allAppoinment = await Appointment.find({ petientId: req.user?._id })
+
     if (!allAppoinment) {
       return next(errorHandler(404, "appoinment  does not exist"))
     }
@@ -77,7 +76,6 @@ const getAllAppoinment = async (
     return next(error)
   }
 }
-
 
 export default {
   patientAppoinment,

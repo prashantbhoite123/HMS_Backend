@@ -10,6 +10,10 @@ router.post(
   PatientAppoinment.patientAppoinment
 )
 
-router.get("/getallappinment", PatientAppoinment.getAllAppoinment)
+router.get(
+  "/getallappinment",
+  isAuthentication,
+  PatientAppoinment.getAllAppoinment
+)
 
 export default router
