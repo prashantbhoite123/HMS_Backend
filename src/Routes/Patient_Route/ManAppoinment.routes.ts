@@ -4,8 +4,8 @@ import { isAuthentication } from "../../middleware/Auth.middleware"
 const router = express.Router()
 
 router.delete(
-  "/delapp/:patientId",
-  isAuthentication,
+  "/delapp/:appId",
+  // isAuthentication,
   ManageAppoinment.deleteAppoinment
 )
 

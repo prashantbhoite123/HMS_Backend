@@ -9,18 +9,25 @@ const deleteAppoinment = async (
   next: NextFunction
 ) => {
   try {
-    const { patientId } = req.params
-    if (!patientId) {
+    const { appId } = req.params
+    console.log("this appId:", appId)
+
+    if (!appId) {
       return next(errorHandler(500, "Patient id not found"))
     }
 
-    const patientApp = Appointment.findByIdAndDelete(patientId)
+    const deletedAppoinment = await Appointment.findByIdAndDelete(appId)
+
+    if (!deletedAppoinment) {
+      return next(errorHandler(404, "Appointment not found"))
+    }
 
     return res
       .status(200)
-      .json({ success: true, message: "Appoinment Delete successfull" })
+      .json({ success: true, message: "Appointment deleted successfully" })
   } catch (error: any) {
-    console.log("something went wrong")
+    console.error("An error occurred:", error)
+    return next(errorHandler(500, "Something went wrong"))
   }
 }
 
