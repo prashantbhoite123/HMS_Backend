@@ -35,5 +35,5 @@ router.put(
   CreateHospital.updateHospital
 )
 
-router.get("/gethospital", isAuthentication, CreateHospital.getMyhospital)
+
 export default router
