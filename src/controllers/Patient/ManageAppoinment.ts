@@ -10,6 +10,7 @@ const updateAppoinment = async (
 ) => {
   try {
     const { updatedAppId } = req.params
+    const { hospitalId } = req.params
     if (!updatedAppId) {
       return next(errorHandler(404, "updatedappId not found"))
     }
@@ -19,6 +20,8 @@ const updateAppoinment = async (
       {
         $set: {
           ...req.body,
+          patientId: req.user?._id,
+          hospitalId: hospitalId,
         },
       }
     )
