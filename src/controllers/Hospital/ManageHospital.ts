@@ -97,11 +97,7 @@ const searchHospital = async (
   }
 }
 
-const getRestaurant = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getHospital = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { hospitalid } = req.params
 
@@ -125,5 +121,5 @@ const getRestaurant = async (
 export default {
   getallHospital,
   searchHospital,
-  getRestaurant,
+  getHospital,
 }
