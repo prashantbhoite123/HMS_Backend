@@ -6,6 +6,7 @@ export interface IAppointment extends Document {
   petientId: string
   doctorName: string
   appointmentDate: Date
+  appTime: string
   reason: string
   status: string
 }

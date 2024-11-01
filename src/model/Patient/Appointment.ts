@@ -24,6 +24,10 @@ const AppointmentSchema: Schema = new Schema({
     type: Date,
     required: true,
   },
+  appTime: {
+    type: String,
+    required: true,
+  },
   reason: {
     type: String,
     required: true,
