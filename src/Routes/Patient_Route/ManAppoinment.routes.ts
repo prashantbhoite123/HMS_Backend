@@ -10,7 +10,7 @@ router.delete(
 )
 
 router.put(
-  "/update/:updatedAppId/:hospitalId",
+  "/update/:updatedAppId",
   isAuthentication,
   ManageAppoinment.updateAppoinment
 )

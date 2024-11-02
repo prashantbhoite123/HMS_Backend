@@ -10,7 +10,7 @@ const updateAppoinment = async (
 ) => {
   try {
     const { updatedAppId } = req.params
-    const { hospitalId } = req.params
+
     if (!updatedAppId) {
       return next(errorHandler(404, "updatedappId not found"))
     }
@@ -20,8 +20,6 @@ const updateAppoinment = async (
       {
         $set: {
           ...req.body,
-          patientId: req.user?._id,
-          hospitalId: hospitalId,
         },
       }
     )
@@ -30,7 +28,9 @@ const updateAppoinment = async (
       return next(errorHandler(404, "appoinment not found"))
     }
 
-    return res.status(200).json({ message: "appoinment updated successfull" })
+    return res
+      .status(200)
+      .json({ message: "appoinment updated successfull", updatedAppoinment })
   } catch (error) {
     console.log("Something went wrong")
     return next(error)
