@@ -80,7 +80,7 @@ const searchHospital = async (
       .limit(pageSize)
       .lean()
 
-    console.log("search hospitals=======>", hospitals)
+    
     const total = await Hospital.countDocuments(query)
 
     const response = {
