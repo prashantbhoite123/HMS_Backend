@@ -80,7 +80,6 @@ const searchHospital = async (
       .limit(pageSize)
       .lean()
 
-    
     const total = await Hospital.countDocuments(query)
 
     const response = {
@@ -119,8 +118,33 @@ const getHospital = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const deleteHospital = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!hospitalid) {
+      return next(errorHandler(404, "Hospital id not found"))
+    }
+
+    const deleteHos = await Hospital.findByIdAndDelete({ owner: req.user?._id })
+
+    if (!deleteHos) {
+      return next(errorHandler(400, "failed to delete hospital"))
+    }
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Hospital delete successfull" })
+  } catch (error) {
+    console.log("something went wrong")
+    return
+  }
+}
 export default {
   getallHospital,
   searchHospital,
   getHospital,
+  deleteHospital,
 }
