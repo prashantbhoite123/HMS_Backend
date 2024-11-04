@@ -75,7 +75,6 @@ const searchAppoinment = async (
     const sortOption = (req.query.sortOption as string) || "createdAt"
     const page = parseInt(req.query.page as string) || 1
 
-    console.log("backend searchQuery ==>", searchQuery)
     let query: any = {}
 
     const appCheck = await Appointment.countDocuments(query)
@@ -101,7 +100,6 @@ const searchAppoinment = async (
     const pageSize = 5
     const skip = (page - 1) * pageSize
 
-    console.log("this is query", query)
     const appointments = await Appointment.find(query)
       .sort({ [sortOption]: -1 })
       .limit(pageSize)
