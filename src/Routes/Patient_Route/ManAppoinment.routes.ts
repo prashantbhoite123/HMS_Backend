@@ -15,4 +15,10 @@ router.put(
   ManageAppoinment.updateAppoinment
 )
 
+router.get(
+  "/search",
+  // isAuthentication,
+  ManageAppoinment.searchAppoinment
+)
+
 export default router
