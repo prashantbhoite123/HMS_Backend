@@ -65,7 +65,62 @@ const deleteAppoinment = async (
   }
 }
 
+const searchAppoinment = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const searchQuery = (req.query.searchQuery as string) || ""
+    const sortOption = (req.query.searchQuery as string) || "createdAt"
+    const page = parseInt(req.query.page as string) || 1
+
+    let query: any = {}
+
+    const appCheck = await Appointment.countDocuments(query)
+
+    if (appCheck === 0) {
+      return res.json({
+        data: [],
+        total: 0,
+        page: 1,
+        pages: 1,
+      })
+    }
+    if (searchQuery) {
+      const searchRegex = new RegExp(searchQuery, "i")
+      query["$or"] = [
+        { patientName: searchRegex },
+        { doctorName: searchRegex },
+        { reason: searchRegex },
+      ]
+    }
+
+    const pageSize = 5
+    const skip = (page - 1) * pageSize
+    const appoinment = await Appointment.find(query)
+      .sort({ [sortOption]: -1 })
+      .limit(pageSize)
+      .skip(skip)
+      .lean()
+
+    const total = await Appointment.countDocuments(query)
+    const responce = {
+      data: appoinment,
+      pagination: {
+        total,
+        page,
+        pages: Math.ceil(total / pageSize),
+      },
+    }
+    return res.json(responce)
+  } catch (error: any) {
+    console.log("Something went wrong")
+    return next(error)
+  }
+}
 export default {
   deleteAppoinment,
   updateAppoinment,
+  searchAppoinment,
 }
