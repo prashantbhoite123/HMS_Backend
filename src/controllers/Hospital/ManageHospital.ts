@@ -124,12 +124,14 @@ const deleteHospital = async (
   next: NextFunction
 ) => {
   try {
-    if (!hospitalid) {
-      return next(errorHandler(404, "Hospital id not found"))
+    if (!req.user?._id) {
+      return next(errorHandler(404, "you have Login first"))
     }
 
-    const deleteHos = await Hospital.findByIdAndDelete({ owner: req.user?._id })
+    const hospital = await Hospital.findOne({ owner: req.user?._id })
+    const deleteHos = await Hospital.findByIdAndDelete(hospital?._id)
 
+    console.log(deleteHos)
     if (!deleteHos) {
       return next(errorHandler(400, "failed to delete hospital"))
     }
