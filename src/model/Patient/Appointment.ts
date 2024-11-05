@@ -32,6 +32,10 @@ const AppointmentSchema: Schema = new Schema({
     type: String,
     required: true,
   },
+  apptNumber: {
+    type: String,
+    required: true,
+  },
   status: {
     type: String,
     required: true,

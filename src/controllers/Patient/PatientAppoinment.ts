@@ -6,6 +6,7 @@ import { sendMail } from "../../utils/mailer"
 import { param } from "express-validator"
 import Hospital from "../../model/Hospital/hospitalcreate.model"
 import { User } from "../../model/common_Model/user.model"
+import { generateAppointmentNumber } from "../../middleware/PatientMidd/Appt.middleware"
 
 const patientAppoinment = async (
   req: AuthenticatedRequest,
@@ -23,10 +24,17 @@ const patientAppoinment = async (
 
     const appoinment = await Appointment.findOne({ petientId: petientId })
 
+    const appoinmentNum = generateAppointmentNumber(
+      req.body.patientName as string
+    )
+
+    console.log(req.body.patientName)
+    console.log("this is appoinment", appoinmentNum)
     const newAppoinment = await Appointment.create({
       ...req.body,
       petientId: petientId,
       hospitalId,
+      apptNumber: appoinmentNum,
     })
 
     console.log(newAppoinment)
