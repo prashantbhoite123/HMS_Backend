@@ -50,7 +50,7 @@ const patientAppoinment = async (
       patientEmail?.email,
       // "bhoitep326@gmail.com",
       "Appoinement",
-      "Appinment book successfull",
+      `Appinment book successfull and your appoinment number :- ${appoinmentNum}`,
       "",
       process.env.EMAIL_USER,
       process.env.EMAIL_PASS
