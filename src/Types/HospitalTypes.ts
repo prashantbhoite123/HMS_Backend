@@ -29,6 +29,7 @@ export interface IHospital extends Document {
   services?: string[]
   doctors: {
     doctorName: string
+    email: string
     education: string
     experienceYears: number
     specialization: string

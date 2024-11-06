@@ -86,6 +86,10 @@ const doctorSchema: Schema = new Schema({
     required: true,
     trim: true,
   },
+  email: {
+    type: String,
+    required: true,
+  },
   education: {
     type: String,
     required: true,
