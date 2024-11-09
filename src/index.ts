@@ -7,6 +7,7 @@ import hospitalcreate from "./Routes/Hospital_Routes/Hospital.routes"
 import manageHospitalRoute from "./Routes/Hospital_Routes/ManageHospital.routes"
 import appoinmentRoute from "./Routes/Patient_Route/Appoinment.routes"
 import manAppoinmentRoute from "./Routes/Patient_Route/ManAppoinment.routes"
+import dashboardRoute from "./Routes/Hospital_Routes/Dashboard.routes"
 import { v2 as cloudinary } from "cloudinary"
 import cors from "cors"
 import cookieParser from "cookie-parser"
@@ -51,6 +52,7 @@ app.use("/api/my/hospital", hospitalcreate)
 app.use("/api/manage", manageHospitalRoute)
 app.use("/api/appoinment", appoinmentRoute)
 app.use("/api/manappoinemt", manAppoinmentRoute)
+app.use("/api/dash", dashboardRoute)
 
 app.use(errorMiddleware)
 app.listen(process.env.PORT, () => {
