@@ -33,12 +33,16 @@ const getAllDashData = async (
 
     const totalAppoinment = await Appointment.countDocuments()
 
-    const taoalData = {
-      totalDoctors,
-      totalUser,
-      totalAppoinment,
+    const totalData = {
+      CardData: {
+        totalDoctors,
+        totalUser,
+        totalAppoinment,
+      },
       latesAppoinments,
     }
+    console.log(totalData)
+    return res.json(totalData)
   } catch (error: any) {
     return next(errorHandler(400, "Failed to get data"))
   }
