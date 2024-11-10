@@ -72,8 +72,11 @@ const getAllAppoinment = async (
   next: NextFunction
 ) => {
   try {
-    const allAppoinment = await Appointment.find({ petientId: req.user?._id })
+    const allAppoinment = await Appointment.find({
+      petientId: req.user?._id,
+    }).populate("hospitalId", "hospitalName")
 
+    const hospitalName = await Hospital.findOne({})
     if (!allAppoinment) {
       return next(errorHandler(404, "appoinment  does not exist"))
     }

@@ -101,6 +101,7 @@ const searchAppoinment = async (
     const skip = (page - 1) * pageSize
 
     const appointments = await Appointment.find(query)
+      .populate("hospitalId", "hospitalName")
       .sort({ [sortOption]: -1 })
       .limit(pageSize)
       .skip(skip)

@@ -68,10 +68,10 @@ const getAllDashData = async (
     ])
 
     const startOfToday = new Date()
-    startOfToday.setHours(0, 0, 0, 0) // Set time to 00:00:00.000
+    startOfToday.setHours(0, 0, 0, 0) 
 
     const endOfToday = new Date()
-    endOfToday.setHours(23, 59, 59, 999) // Set time to 23:59:59.999
+    endOfToday.setHours(23, 59, 59, 999) 
 
     const todayAppointments = await Appointment.find({
       appointmentDate: { $gte: startOfToday, $lt: endOfToday },
