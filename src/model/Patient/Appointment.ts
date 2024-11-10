@@ -42,6 +42,7 @@ const AppointmentSchema: Schema = new Schema({
     enum: ["Pending", "Completed", "Cancelled"],
     default: "Pending",
   },
+  createdAt: { type: Date, default: Date.now, index: true },
 })
 
 export const Appointment = mongoose.model<IAppointment>(
