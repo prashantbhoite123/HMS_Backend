@@ -68,16 +68,19 @@ const getAllDashData = async (
     ])
 
     const startOfToday = new Date()
-    startOfToday.setHours(0, 0, 0, 0) 
+    startOfToday.setHours(0, 0, 0, 0)
 
     const endOfToday = new Date()
-    endOfToday.setHours(23, 59, 59, 999) 
+    endOfToday.setHours(23, 59, 59, 999)
 
     const todayAppointments = await Appointment.find({
-      appointmentDate: { $gte: startOfToday, $lt: endOfToday },
+      appointmentDate: { $gte: startOfToday, $lte: endOfToday },
     })
 
-    console.log(todayAppointments)
+    // console.log("Today’s Appointments:", todayAppointments)
+
+    // console.log(todayAppointments)
+
     const totalData = {
       CardData: {
         totalDoctors,
@@ -91,7 +94,7 @@ const getAllDashData = async (
       doctors,
       allAppoinment,
     }
-    console.log(totalData)
+    // console.log(totalData)
     return res.json(totalData)
   } catch (error: any) {
     return next(errorHandler(400, "Failed to get data"))
