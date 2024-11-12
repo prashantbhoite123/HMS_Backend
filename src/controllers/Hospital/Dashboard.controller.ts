@@ -4,7 +4,7 @@ import { errorHandler } from "../../utils/error.handler"
 import Hospital from "../../model/Hospital/hospitalcreate.model"
 import { Appointment } from "../../model/Patient/Appointment"
 import { User } from "../../model/common_Model/user.model"
-import { count } from "console"
+import { IAppointment } from "../../Types/HospitalTypes"
 
 const getAllDashData = async (
   req: AuthenticatedRequest,
@@ -22,8 +22,6 @@ const getAllDashData = async (
       return next(errorHandler(404, "Hopital not found"))
     }
     const doctors = hospital.doctors
-    const totalDoctors = hospital.doctors.length
-    const totalUser = await User.countDocuments()
 
     const latesAppoinments = await Appointment.find({
       hospitalId: hospital._id,
@@ -36,7 +34,15 @@ const getAllDashData = async (
       return next(errorHandler(404, "Appoinment not found"))
     }
 
-    const totalAppoinment = await Appointment.countDocuments()
+    const pendingAppoinments = allAppoinment.filter(
+      (app: IAppointment) => app.status === "Pending"
+    )
+    const cancelAppoinments = allAppoinment.filter(
+      (app: IAppointment) => app.status === "Cancelled"
+    )
+    const completeAppoinments = allAppoinment.filter(
+      (app: IAppointment) => app.status === "Completed"
+    )
 
     const now = new Date()
 
@@ -76,16 +82,14 @@ const getAllDashData = async (
     const todayAppointments = await Appointment.find({
       appointmentDate: { $gte: startOfToday, $lte: endOfToday },
     })
-
-    // console.log("Today’s Appointments:", todayAppointments)
-
-    // console.log(todayAppointments)
+      .sort({ createdAt: -1 })
+      .limit(5)
 
     const totalData = {
       CardData: {
-        totalDoctors,
-        totalUser,
-        totalAppoinment,
+        completeAppoinments: completeAppoinments.length,
+        cancelAppoinments: cancelAppoinments.length,
+        pendingAppoinments: pendingAppoinments.length,
         lastMonthAppoinment,
       },
       latesAppoinments,
@@ -94,7 +98,6 @@ const getAllDashData = async (
       doctors,
       allAppoinment,
     }
-    // console.log(totalData)
     return res.json(totalData)
   } catch (error: any) {
     return next(errorHandler(400, "Failed to get data"))
