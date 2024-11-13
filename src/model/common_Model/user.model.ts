@@ -1,13 +1,45 @@
 import mongoose from "mongoose"
 
+interface Iadmin {
+  isAdmin: boolean
+  key: number
+  logedin: boolean
+  otp: number
+  otpExpiry: number
+}
+
 export interface Hospitaldocument extends Document {
   _id: any
   username: string
   email: string
   password: string
   role: string
+  admin: Iadmin
   profilepic: string
 }
+
+const adminSchema = new mongoose.Schema({
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
+  key: {
+    type: Number,
+    default: 1111,
+  },
+  logedin: {
+    type: Boolean,
+    default: false,
+  },
+  otp: {
+    type: Number,
+    default: null,
+  },
+  otpExpiry: {
+    type: Number,
+    default: null,
+  },
+})
 
 const hospitalRegistation = new mongoose.Schema(
   {
@@ -28,6 +60,10 @@ const hospitalRegistation = new mongoose.Schema(
       type: String,
       default: "",
     },
+    admin: {
+      type: adminSchema,
+      required: false,
+    },
     profilepic: {
       type: String,
       default:
@@ -37,4 +73,7 @@ const hospitalRegistation = new mongoose.Schema(
   { timestamps: true }
 )
 
-export const User = mongoose.model<Hospitaldocument>("User", hospitalRegistation)
+export const User = mongoose.model<Hospitaldocument>(
+  "User",
+  hospitalRegistation
+)
