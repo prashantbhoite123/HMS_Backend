@@ -4,8 +4,8 @@ interface Iadmin {
   isAdmin: boolean
   key: number
   logedin: boolean
-  otp: number
-  otpExpiry: number
+  otp?: number
+  otpExpiry?: number
 }
 
 export interface Hospitaldocument extends Document {
@@ -33,11 +33,11 @@ const adminSchema = new mongoose.Schema({
   },
   otp: {
     type: Number,
-    default: null,
+    default: undefined,
   },
   otpExpiry: {
     type: Number,
-    default: null,
+    default: undefined,
   },
 })
 

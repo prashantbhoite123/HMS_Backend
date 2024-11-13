@@ -8,6 +8,7 @@ import manageHospitalRoute from "./Routes/Hospital_Routes/ManageHospital.routes"
 import appoinmentRoute from "./Routes/Patient_Route/Appoinment.routes"
 import manAppoinmentRoute from "./Routes/Patient_Route/ManAppoinment.routes"
 import dashboardRoute from "./Routes/Hospital_Routes/Dashboard.routes"
+import adminRoute from "./Routes/Common_Routes/adminUser.routes"
 import { v2 as cloudinary } from "cloudinary"
 import cors from "cors"
 import cookieParser from "cookie-parser"
@@ -50,11 +51,19 @@ app.use("/api/auth", userRoute)
 // Hospital Route//
 app.use("/api/my/hospital", hospitalcreate)
 app.use("/api/manage", manageHospitalRoute)
+
+// Appoinment Route
 app.use("/api/appoinment", appoinmentRoute)
 app.use("/api/manappoinemt", manAppoinmentRoute)
-app.use("/api/dash", dashboardRoute)
 
+// Dashboard
+app.use("/api/dash", dashboardRoute)
+//
+app.use("/api/admin", adminRoute)
+// middleware
 app.use(errorMiddleware)
+
+// sarver 
 app.listen(process.env.PORT, () => {
   console.log(`Server is working on http://localhost:${process.env.PORT}`)
 })

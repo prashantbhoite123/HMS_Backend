@@ -52,3 +52,44 @@ const adminSingin = async (
     return next(error)
   }
 }
+
+const varifyOTP = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { email, otp } = req.body
+
+    if (!email || !otp || email === "" || otp === "") {
+      return next(errorHandler(404, "Email or otp are required"))
+    }
+
+    const adminUser = await User.findOne({ email })
+    if (!adminUser) {
+      return next(errorHandler(404, "Admin not found"))
+    }
+
+    if (
+      adminUser.admin.otp !== otp ||
+      (adminUser.admin.otpExpiry && Date.now() > adminUser.admin.otpExpiry)
+    ) {
+      return next(errorHandler(403, "Invlaid or expired OTP"))
+    }
+
+    adminUser.admin.otp = undefined
+    adminUser.admin.otpExpiry = undefined
+    await adminUser.save()
+
+    return res
+      .status(200)
+      .json({ message: "OTP verified, admin signed in successfully" })
+  } catch (error: any) {
+    return next(error)
+  }
+}
+
+export default {
+  adminSingin,
+  varifyOTP,
+}
