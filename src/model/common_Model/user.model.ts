@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 
 interface Iadmin {
   isAdmin: boolean
-  key: number
+  Akey: number
   logedin: boolean
   otp?: number
   otpExpiry?: number
@@ -23,9 +23,9 @@ const adminSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  key: {
+  Akey: {
     type: Number,
-    default: 1111,
+    default: 9021,
   },
   logedin: {
     type: Boolean,

@@ -55,7 +55,13 @@ const userRegistration = async (req: Request, res: Response) => {
       username,
       email,
       password: dicreptedPassword,
-
+      admin: {
+        isAdmin: true,
+        key: 9021,
+        logedin: true,
+        otp: undefined,
+        otpExpiry: undefined,
+      },
       role,
     })
 

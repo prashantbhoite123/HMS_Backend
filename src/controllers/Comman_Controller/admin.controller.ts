@@ -3,6 +3,8 @@ import { AuthenticatedRequest } from "../../Types/types"
 import { errorHandler } from "../../utils/error.handler"
 import { User } from "../../model/common_Model/user.model"
 import { sendMail } from "../../utils/mailer"
+import jwt from "jsonwebtoken"
+import { error } from "console"
 
 const adminSingin = async (
   req: AuthenticatedRequest,
@@ -10,21 +12,24 @@ const adminSingin = async (
   next: NextFunction
 ) => {
   try {
-    const { key, email, password } = req.body
-    if (key !== process.env.ADMIN_KEY) {
+    const { Akey, email, password } = req.body
+    console.log(req.body)
+    console.log(process.env.ADMIN_KEY)
+    if (Akey !== 9021) {
       return next(errorHandler(404, "invalid admin key"))
     }
-    if (!key || !email || !password) {
+    if (!Akey || !email || !password) {
       return next(errorHandler(404, "All field are required"))
     }
 
     const adminUser = await User.findOne({ email })
+    console.log(adminUser)
     if (!adminUser) {
       return next(errorHandler(404, "admin not found"))
     }
 
-    if (adminUser.admin.key !== key) {
-      return next(errorHandler(404, "invalid admin key"))
+    if (Akey !== adminUser.admin.Akey) {
+      return next(errorHandler(404, "invalid admin user key"))
     }
     function generateOTP() {
       const otp = Math.floor(1000 + Math.random() * 9000)
@@ -48,6 +53,8 @@ const adminSingin = async (
       process.env.EMAIL_USER,
       process.env.EMAIL_PASS
     )
+
+    res.status(200).json({ message: "message send successfull" })
   } catch (error: any) {
     return next(error)
   }
@@ -79,8 +86,19 @@ const varifyOTP = async (
 
     adminUser.admin.otp = undefined
     adminUser.admin.otpExpiry = undefined
+    adminUser.admin.logedin = true
     await adminUser.save()
 
+    const { password, ...rest } = adminUser.toObject()
+    const token = jwt.sign(
+      { _id: adminUser._id },
+      process.env.SECRETKEY as string
+    )
+
+    res
+      .cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
+      .status(200)
+      .json(rest)
     return res
       .status(200)
       .json({ message: "OTP verified, admin signed in successfully" })
@@ -89,7 +107,31 @@ const varifyOTP = async (
   }
 }
 
+const adminLogout = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    res.clearCookie("token", { httpOnly: true, secure: true })
+    const logoutAdmin = await User.findOne({ _id: req.user?._id })
+    if (!logoutAdmin) {
+      return next(error(errorHandler(401, "Login first right now")))
+    }
+
+    if (logoutAdmin && logoutAdmin.admin) {
+      logoutAdmin.admin.logedin = false
+      await logoutAdmin?.save()
+    }
+
+    res.status(200).json({ message: "Admin logout successful" })
+  } catch (error) {
+    return next(error)
+  }
+}
+
 export default {
   adminSingin,
   varifyOTP,
+  adminLogout,
 }
