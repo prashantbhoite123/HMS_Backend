@@ -32,7 +32,7 @@ const adminSingin = async (
       return next(errorHandler(404, "invalid admin user key"))
     }
     function generateOTP() {
-      const otp = Math.floor(1000 + Math.random() * 900000)
+      const otp = Math.floor(1000 + Math.random() * 9000)
       return otp
     }
     const otp = generateOTP()
@@ -53,8 +53,10 @@ const adminSingin = async (
       process.env.EMAIL_USER,
       process.env.EMAIL_PASS
     )
-
-    res.status(200).json({ success: true, message: "message send successfull" })
+    console.log(otpExpiry)
+    return res
+      .status(200)
+      .json({ otpExpiry, success: true, message: "OTP send your email" })
   } catch (error: any) {
     return next(error)
   }
@@ -67,6 +69,8 @@ const varifyOTP = async (
 ) => {
   try {
     const { email, otp } = req.body
+    console.log(email)
+    console.log(otp)
 
     if (!email || !otp || email === "" || otp === "") {
       return next(errorHandler(404, "Email or otp are required"))
@@ -76,7 +80,7 @@ const varifyOTP = async (
     if (!adminUser) {
       return next(errorHandler(404, "Admin not found"))
     }
-
+    console.log(adminUser.admin.otp)
     if (
       adminUser.admin.otp !== otp ||
       (adminUser.admin.otpExpiry && Date.now() > adminUser.admin.otpExpiry)
@@ -99,7 +103,11 @@ const varifyOTP = async (
     return res
       .cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
       .status(200)
-      .json({ message: "OTP verified, admin signed in successfully", rest })
+      .json({
+        success: true,
+        message: "OTP verified, admin signed in successfully",
+        rest,
+      })
   } catch (error: any) {
     return next(error)
   }
@@ -132,7 +140,7 @@ const resendOtp = async (
     }
 
     const generateOTP = () => {
-      const otp = Math.floor(1000 + Math.random() * 900000)
+      const otp = Math.floor(1000 + Math.random() * 9000)
       return otp
     }
 
@@ -157,7 +165,7 @@ const resendOtp = async (
 
     return res
       .status(200)
-      .json({ message: "New OTP has been sent to your email." })
+      .json({ otpExpiry, message: "New OTP has been sent to your email." })
   } catch (error: any) {
     return next(error)
   }

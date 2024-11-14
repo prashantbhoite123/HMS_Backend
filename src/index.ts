@@ -21,8 +21,10 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Your frontend URL
-    credentials: true, // Allow credentials to be sent
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 )
 mongoose
@@ -63,7 +65,7 @@ app.use("/api/admin", adminRoute)
 // middleware
 app.use(errorMiddleware)
 
-// sarver 
+// sarver
 app.listen(process.env.PORT, () => {
   console.log(`Server is working on http://localhost:${process.env.PORT}`)
 })
