@@ -6,6 +6,6 @@ const router = express.Router()
 
 router.post("/adminsign", adminController.adminSingin)
 router.post("/varifyotp", adminController.varifyOTP)
-router.post("/alogout", isAuthentication, adminController.adminLogout)
+router.get("/alogout", isAuthentication, adminController.adminLogout)
 
 export default router

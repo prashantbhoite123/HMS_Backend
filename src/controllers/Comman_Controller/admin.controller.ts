@@ -84,24 +84,22 @@ const varifyOTP = async (
       return next(errorHandler(403, "Invlaid or expired OTP"))
     }
 
+    const token = jwt.sign(
+      { _id: adminUser._id },
+      process.env.SECRETKEY as string
+    )
+
     adminUser.admin.otp = undefined
     adminUser.admin.otpExpiry = undefined
     adminUser.admin.logedin = true
     await adminUser.save()
 
     const { password, ...rest } = adminUser.toObject()
-    const token = jwt.sign(
-      { _id: adminUser._id },
-      process.env.SECRETKEY as string
-    )
 
-    res
+    return res
       .cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
       .status(200)
-      .json(rest)
-    return res
-      .status(200)
-      .json({ message: "OTP verified, admin signed in successfully" })
+      .json({ message: "OTP verified, admin signed in successfully", rest })
   } catch (error: any) {
     return next(error)
   }
@@ -123,7 +121,17 @@ const adminLogout = async (
       logoutAdmin.admin.logedin = false
       await logoutAdmin?.save()
     }
-
+    sendMail(
+      //   hosEmail?.email,
+      "pbhoite985@gmail.com",
+      //   adminUser.email,
+      "bhoitep326@gmail.com",
+      "Your Accout has been logouted",
+      `Admin has been logouted ${new Date().toLocaleDateString()}`,
+      "",
+      process.env.EMAIL_USER,
+      process.env.EMAIL_PASS
+    )
     res.status(200).json({ message: "Admin logout successful" })
   } catch (error) {
     return next(error)
