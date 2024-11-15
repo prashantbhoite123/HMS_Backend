@@ -171,42 +171,8 @@ const resendOtp = async (
   }
 }
 
-const adminLogout = async (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    res.clearCookie("token", { httpOnly: true, secure: true })
-    const logoutAdmin = await User.findOne({ _id: req.user?._id })
-    if (!logoutAdmin) {
-      return next(error(errorHandler(401, "Login first right now")))
-    }
-
-    if (logoutAdmin && logoutAdmin.admin) {
-      logoutAdmin.admin.logedin = false
-      await logoutAdmin?.save()
-    }
-    sendMail(
-      //   hosEmail?.email,
-      "pbhoite985@gmail.com",
-      //   adminUser.email,
-      "bhoitep326@gmail.com",
-      "Your Accout has been logouted",
-      `Admin has been logouted ${new Date().toLocaleDateString()}`,
-      "",
-      process.env.EMAIL_USER,
-      process.env.EMAIL_PASS
-    )
-    res.status(200).json({ message: "Admin logout successful" })
-  } catch (error) {
-    return next(error)
-  }
-}
-
 export default {
   adminSingin,
   varifyOTP,
-  adminLogout,
   resendOtp,
 }
