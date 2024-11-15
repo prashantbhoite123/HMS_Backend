@@ -35,7 +35,10 @@ export interface IHospital extends Document {
 
 export interface Idoctors extends Document {
   doctorName: string
+  profilePic?: string
+  degree: string
   email: string
+  password: string
   education: string
   experienceYears: number
   specialization: string

@@ -7,7 +7,29 @@ const doctorSchema: Schema = new Schema({
     required: true,
     trim: true,
   },
+  profilePic: {
+    type: String,
+    default:
+      "https://www.shutterstock.com/image-vector/doctor-icon-260nw-224509450.jpg",
+  },
+  degree: {
+    type: String,
+    required: true,
+  },
   email: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  ownerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  hospitalId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Hospital",
+  },
+  password: {
     type: String,
     required: true,
   },
@@ -32,4 +54,4 @@ const doctorSchema: Schema = new Schema({
   },
 })
 
-const doctors = mongoose.model<Idoctors>("doctors", doctorSchema)
+export const Doctors = mongoose.model<Idoctors>("Doctors", doctorSchema)

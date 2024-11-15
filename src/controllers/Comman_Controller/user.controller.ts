@@ -57,7 +57,6 @@ const userRegistration = async (req: Request, res: Response) => {
       password: dicreptedPassword,
       role,
     })
-
     res
       .status(200)
       .json({ success: true, message: "Registration SuccessFully" })

@@ -8,6 +8,7 @@ import manageHospitalRoute from "./Routes/Hospital_Routes/ManageHospital.routes"
 import appoinmentRoute from "./Routes/Patient_Route/Appoinment.routes"
 import manAppoinmentRoute from "./Routes/Patient_Route/ManAppoinment.routes"
 import dashboardRoute from "./Routes/Hospital_Routes/Dashboard.routes"
+import doctorsRoute from "./Routes/Hospital_Routes/Doctors/Doctor.routes"
 import adminRoute from "./Routes/Common_Routes/adminUser.routes"
 import { v2 as cloudinary } from "cloudinary"
 import cors from "cors"
@@ -57,11 +58,13 @@ app.use("/api/manage", manageHospitalRoute)
 // Appoinment Route
 app.use("/api/appoinment", appoinmentRoute)
 app.use("/api/manappoinemt", manAppoinmentRoute)
-
-// Dashboard
+// Doctors route
+app.use("/api/doctor", doctorsRoute)
+// Dashboard route
 app.use("/api/dash", dashboardRoute)
-//
+// Admin route
 app.use("/api/admin", adminRoute)
+
 // middleware
 app.use(errorMiddleware)
 

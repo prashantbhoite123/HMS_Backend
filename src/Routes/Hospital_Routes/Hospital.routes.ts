@@ -16,8 +16,8 @@ const upload = multer({
 })
 
 router.post(
-  "/createhospital/:ownerId",
-  upload.single("picture"),
+  "/createhospital",
+  // upload.single("picture"),
   isAuthentication,
   validateHospital,
   CreateHospital.createHospital
