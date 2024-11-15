@@ -21,8 +21,7 @@ const getAllDashData = async (
     if (!hospital) {
       return next(errorHandler(404, "Hopital not found"))
     }
-    const doctors = hospital.doctors
-
+  
     const latesAppoinments = await Appointment.find({
       hospitalId: hospital._id,
     })
@@ -95,7 +94,6 @@ const getAllDashData = async (
       latesAppoinments,
       chartData: result,
       todayAppointments,
-      doctors,
       allAppoinment,
     }
     return res.json(totalData)

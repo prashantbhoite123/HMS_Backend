@@ -27,15 +27,17 @@ export interface IHospital extends Document {
   totalBeds: number
   departments?: string[]
   services?: string[]
-  doctors: {
-    doctorName: string
-    email: string
-    education: string
-    experienceYears: number
-    specialization: string
-    workingHours: string
-  }[]
+  status: string
   picture: string
   owner: mongoose.Types.ObjectId
   // New Fields
+}
+
+export interface Idoctors extends Document {
+  doctorName: string
+  email: string
+  education: string
+  experienceYears: number
+  specialization: string
+  workingHours: string
 }

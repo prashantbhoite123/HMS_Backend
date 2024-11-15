@@ -14,27 +14,6 @@ const handleValidationError = (
   next()
 }
 
-export const parseDoctors = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const doctorsString = req.body.doctors
-
-  if (typeof doctorsString === "string") {
-    try {
-      req.body.doctors = JSON.parse(doctorsString)
-    } catch (err) {
-      return res.status(400).json({ error: "Invalid doctors array format" })
-    }
-  }
-
-  if (!Array.isArray(req.body.doctors)) {
-    return res.status(400).json({ error: "Doctors must be an array" })
-  }
-
-  next()
-}
 
 // Validation rules for doctors array within hospital
 export const validateHospital = [
@@ -83,31 +62,6 @@ export const validateHospital = [
     .isArray()
     .withMessage("Services must be an array"),
 
-  
-  body("doctors")
-    .isArray({ min: 1 })
-    .withMessage("Doctors must be an array with at least one doctor"),
-
-  
-  body("doctors.*.doctorName")
-    .isString()
-    .notEmpty()
-    .withMessage("Doctor name is required and must be a string"),
-  body("doctors.*.education")
-    .isString()
-    .notEmpty()
-    .withMessage("Doctor education is required and must be a string"),
-  body("doctors.*.experienceYears")
-    .isInt({ min: 0 })
-    .withMessage("Doctor experience years must be a non-negative integer"),
-  body("doctors.*.specialization")
-    .isString()
-    .notEmpty()
-    .withMessage("Doctor specialization is required and must be a string"),
-  body("doctors.*.workingHours")
-    .isString()
-    .notEmpty()
-    .withMessage("Working hours are required and must be a string"),
 
   handleValidationError,
 ]
