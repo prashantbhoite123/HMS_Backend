@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import Hospital from "../../model/Hospital/hospitalcreate.model"
 import { AuthenticatedRequest } from "../../Types/types"
 import { errorHandler } from "../../utils/error.handler"
+import { Doctors } from "../../model/Hospital/doctors"
 
 const getallHospital = async (
   req: AuthenticatedRequest,
@@ -15,7 +16,13 @@ const getallHospital = async (
       return next(errorHandler(500, "Hospital not found"))
     }
 
-    res.status(200).json(getallHospital)
+    const doctors = await Doctors.find({ ownerId: req.user?._id })
+
+    const allHospitalData = {
+      getallHospital,
+      doctors,
+    }
+    res.status(200).json(allHospitalData)
   } catch (error) {
     next(error)
   }
