@@ -14,18 +14,18 @@ const logoutUser = async (
     if (user && user.admin) {
       user.admin.logedin = false
       await user?.save()
+      sendMail(
+        //   hosEmail?.email,
+        "pbhoite985@gmail.com",
+        //   adminUser.email,
+        "bhoitep326@gmail.com",
+        "Your Accout has been logouted",
+        `Admin has been logouted ${new Date().toLocaleDateString()} At ${new Date().toLocaleTimeString()}`,
+        "",
+        process.env.EMAIL_USER,
+        process.env.EMAIL_PASS
+      )
     }
-    sendMail(
-      //   hosEmail?.email,
-      "pbhoite985@gmail.com",
-      //   adminUser.email,
-      "bhoitep326@gmail.com",
-      "Your Accout has been logouted",
-      `Admin has been logouted ${new Date().toLocaleDateString()} At ${new Date().toLocaleTimeString()}`,
-      "",
-      process.env.EMAIL_USER,
-      process.env.EMAIL_PASS
-    )
     return res.status(200).json({ message: "Logout successful" })
   } catch (error) {
     console.log(`Error while logout user`)
