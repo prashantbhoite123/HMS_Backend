@@ -16,13 +16,11 @@ const getallHospital = async (
       return next(errorHandler(500, "Hospital not found"))
     }
 
-    const doctors = await Doctors.find({ ownerId: req.user?._id })
-
     const allHospitalData = {
       getallHospital,
-      doctors,
     }
-    res.status(200).json(allHospitalData)
+
+    return res.status(200).json(allHospitalData)
   } catch (error) {
     next(error)
   }
@@ -113,12 +111,21 @@ const getHospital = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const hospital = await Hospital.findById(hospitalid)
+    const doctors = await Doctors.find({ hospitalId: hospitalid })
 
+    if (!doctors) {
+      return next(errorHandler(404, "doctors not found"))
+    }
     if (!hospital) {
       return next(errorHandler(404, "Hospital not found"))
     }
 
-    return res.status(200).json(hospital)
+    // console.log(hospital)
+    console.log({ ...hospital, doctors })
+    // return res.status(200).json({
+    //   ...hospital,
+    //   doctors,
+    // })
   } catch (error) {
     console.log(`Error while getRestaurant  :${error}`)
     return next(error)

@@ -1,6 +1,7 @@
 import express from "express"
 import doctorController from "../../../controllers/Hospital/Doctor.controller"
 import multer from "multer"
+import { isAuthentication } from "../../../middleware/Auth.middleware"
 const router = express.Router()
 
 const storage = multer.memoryStorage()
@@ -13,8 +14,9 @@ const upload = multer({
 })
 
 router.post(
-  "/register",
+  "/register/:hospitalId",
   upload.single("degree"),
+  isAuthentication,
   doctorController.registerDoctor
 )
 

@@ -33,11 +33,15 @@ export interface IHospital extends Document {
   // New Fields
 }
 
+import { Document, ObjectId } from "mongoose"
+
 export interface Idoctors extends Document {
   doctorName: string
   profilePic?: string
   degree: string
   email: string
+  ownerId?: ObjectId
+  hospitalId?: ObjectId
   password: string
   education: string
   experienceYears: number

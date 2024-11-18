@@ -32,10 +32,10 @@ const createHospital = async (
   next: NextFunction
 ) => {
   try {
-    console.log(req.body)
+    // console.log(req.body)
     const _id = req.user?._id
     const existHospital = await Hospital.findOne({ owner: _id })
-    console.log(existHospital)
+    // console.log(existHospital)
     if (existHospital) {
       return next(errorHandler(400, "Hospital already exist"))
     }
@@ -46,17 +46,18 @@ const createHospital = async (
 
     const pictureUrl = await uploadImage(req.file as Express.Multer.File)
 
-    const hospital = new Hospital({
+    const hospital = await Hospital.create({
       ...req.body,
       owner: req.user?._id,
+      picture: pictureUrl,
     })
+    // hospital.owner = new mongoose.Types.ObjectId(req.user?._id)
 
-    hospital.picture = pictureUrl
-    hospital.owner = new mongoose.Types.ObjectId(req.user?._id)
+    // console.log("this is a hospital=====>", hospital)
+    // await hospital.save()
 
-    console.log("this is a hospital=====>", hospital)
-    await hospital.save()
-    res
+    console.log("this is hospital ===>", hospital)
+    return res
       .status(200)
       .json({ success: true, message: "Hospital create successfull", hospital })
   } catch (error: any) {

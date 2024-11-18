@@ -39,6 +39,7 @@ const HospitalSchema: Schema = new Schema<IHospital>(
     },
     status: {
       type: String,
+      required: true,
       enum: ["Pending", "Approved", "Rejected"],
       default: "Pending",
     },
@@ -52,6 +53,7 @@ const HospitalSchema: Schema = new Schema<IHospital>(
     services: {
       type: [String],
     },
+
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
