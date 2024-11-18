@@ -9,7 +9,8 @@ import appoinmentRoute from "./Routes/Patient_Route/Appoinment.routes"
 import manAppoinmentRoute from "./Routes/Patient_Route/ManAppoinment.routes"
 import dashboardRoute from "./Routes/Hospital_Routes/Dashboard.routes"
 import doctorsRoute from "./Routes/Hospital_Routes/Doctors/Doctor.routes"
-import adminRoute from "./Routes/Common_Routes/adminUser.routes"
+import adminRoute from "./Routes/Admin_Routes/adminUser.routes"
+import adminApprovelRoutes from "./Routes/Admin_Routes/adminApprovel.routes"
 import { v2 as cloudinary } from "cloudinary"
 import cors from "cors"
 import cookieParser from "cookie-parser"
@@ -64,6 +65,7 @@ app.use("/api/doctor", doctorsRoute)
 app.use("/api/dash", dashboardRoute)
 // Admin route
 app.use("/api/admin", adminRoute)
+app.use("/api/approvel", adminApprovelRoutes)
 
 // middleware
 app.use(errorMiddleware)

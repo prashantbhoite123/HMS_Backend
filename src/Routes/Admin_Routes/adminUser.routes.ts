@@ -1,5 +1,5 @@
 import express from "express"
-import adminController from "../../controllers/Comman_Controller/admin.controller"
+import adminController from "../../controllers/Admin/admin.controller"
 import { isAuthentication } from "../../middleware/Auth.middleware"
 
 const router = express.Router()
