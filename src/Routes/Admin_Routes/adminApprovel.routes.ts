@@ -9,5 +9,10 @@ router.get(
   isAuthentication,
   adminRequestedhospital.approvelHospitals
 )
+router.put(
+  "/rejected/:hospitalId",
+  // isAuthentication,
+  adminRequestedhospital.rejectHospitalApi
+)
 
 export default router
