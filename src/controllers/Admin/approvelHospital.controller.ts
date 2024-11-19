@@ -46,29 +46,32 @@ const rejectHospitalApi = async (
       return next(errorHandler(404, "reson is required"))
     }
 
-    const updatedhos = await Hospital.findByIdAndUpdate(hospitalId, {
-      $set: {
-        status: "Rejected",
+    const updatedhos = await Hospital.findByIdAndUpdate(
+      hospitalId,
+      {
+        $set: {
+          status: "Rejected",
+        },
       },
-    })
+      { new: true }
+    )
 
-    // const hospitalOwner = await User.findOne({ owner: updatedhos?.owner })
-    // if (!hospitalOwner) {
-    //   return next(errorHandler(404, "Hospital owner not found"))
-    // }
+    const hospitalOwner = await User.findOne({ _id: updatedhos?.owner })
+    if (!hospitalOwner) {
+      return next(errorHandler(404, "Hospital owner not found"))
+    }
     sendMail(
       // hospitalOwner?.email,
       "pbhoite985@gmail.com",
       // hospitalOwner?.email,
       "bhoitep326@gmail.com",
-      "",
       "Hospital Registration Application Status",
-      // `Dear ${hospitalOwner?.username}, \n\n
-      `Dear Prashant, \n\n
-       Thank you for your interest in registering with us !! \n\n
+      `Dear ${hospitalOwner?.username}, \n\n
+       Thank you for your interest in registering with us !!. \n\n
        ${reson} \n\n
        ${updatedhos?.hospitalName}
       `,
+      "",
       process.env.EMAIL_USER,
       process.env.EMAIL_PASS
     )

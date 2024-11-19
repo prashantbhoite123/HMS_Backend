@@ -11,7 +11,7 @@ router.get(
 )
 router.put(
   "/rejected/:hospitalId",
-  // isAuthentication,
+  isAuthentication,
   adminRequestedhospital.rejectHospitalApi
 )
 
