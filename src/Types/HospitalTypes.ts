@@ -30,7 +30,7 @@ export interface IHospital extends Document {
   status: string
   picture: string
   owner: mongoose.Types.ObjectId
-  // New Fields
+  createdAt: Date
 }
 
 import { Document, ObjectId } from "mongoose"

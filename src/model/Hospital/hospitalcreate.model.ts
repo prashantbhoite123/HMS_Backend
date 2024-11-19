@@ -58,6 +58,7 @@ const HospitalSchema: Schema = new Schema<IHospital>(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    createdAt: { type: Date, default: Date.now, index: true },
   },
   { timestamps: true }
 )
