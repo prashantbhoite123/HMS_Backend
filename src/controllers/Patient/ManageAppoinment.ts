@@ -21,7 +21,8 @@ const updateAppoinment = async (
         $set: {
           ...req.body,
         },
-      }
+      },
+      { new: true }
     )
 
     if (!updatedAppoinment) {

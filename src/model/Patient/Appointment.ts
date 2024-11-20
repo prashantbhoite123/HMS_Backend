@@ -49,3 +49,4 @@ export const Appointment = mongoose.model<IAppointment>(
   "Appointment",
   AppointmentSchema
 )
+
