@@ -14,10 +14,14 @@ const getMyhospital = async (
   try {
     const hospitalData = await Hospital.findOne({ owner: req.user?._id })
 
-    if (!hospitalData) {
-      return next(errorHandler(400, "hospital not found"))
+    if (hospitalData?.status === "Approved") {
+      if (!hospitalData) {
+        return next(errorHandler(400, "hospital not found"))
+      }
+      return res.status(200).json(hospitalData)
+    } else {
+      return res.status(200).json(hospitalData?.status)
     }
-    res.status(200).json(hospitalData)
   } catch (error) {
     console.log(`Error while get hospital ${error}`)
     return res

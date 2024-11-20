@@ -88,15 +88,7 @@ Once again, congratulations on this remarkable achievement!
         .status(200)
         .json({ success: true, message: "Hospital Request Approved " })
     } else {
-      const updatedhos = await Hospital.findByIdAndUpdate(
-        hospitalId,
-        {
-          $set: {
-            status: "Rejected",
-          },
-        },
-        { new: true }
-      )
+      const updatedhos = await Hospital.findByIdAndDelete(hospitalId)
 
       const hospitalOwner = await User.findOne({ _id: updatedhos?.owner })
       if (!hospitalOwner) {

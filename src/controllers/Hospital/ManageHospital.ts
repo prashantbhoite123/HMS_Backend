@@ -16,10 +16,11 @@ const getallHospital = async (
       return next(errorHandler(500, "Hospital not found"))
     }
 
-    const allHospitalData = {
-      getallHospital,
-    }
+    const allHospitalData = getallHospital.filter(
+      (hospital) => hospital.status === "Approved"
+    )
 
+    console.log("all hospitals=>", allHospitalData)
     return res.status(200).json(allHospitalData)
   } catch (error) {
     next(error)
