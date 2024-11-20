@@ -20,9 +20,6 @@ router.post(
   doctorController.registerDoctor
 )
 
-export default router
+router.post("/login", doctorController.registerDoctor)
 
-// upload.fields([
-//   { name: "profilePic", maxCount: 1 },
-//   { name: "degree", maxCount: 1 },
-// ]),
+export default router
