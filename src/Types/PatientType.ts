@@ -1,4 +1,5 @@
-import { Document } from "mongoose"
+
+import { Document, ObjectId } from "mongoose"
 
 export interface IPatient extends Document {
   name: string
@@ -14,6 +15,7 @@ export interface IPatient extends Document {
     relation: string
     phone: string
   }
+  userId?: ObjectId
   medicalHistory: {
     allergies: string[]
     chronicConditions: string[]
@@ -39,5 +41,4 @@ export interface IPatient extends Document {
     provider: string
     policyNumber: string
   }
-  documents: string[]
 }

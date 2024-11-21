@@ -11,6 +11,7 @@ import dashboardRoute from "./Routes/Hospital_Routes/Dashboard.routes"
 import doctorsRoute from "./Routes/Hospital_Routes/Doctors/Doctor.routes"
 import adminRoute from "./Routes/Admin_Routes/adminUser.routes"
 import adminApprovelRoutes from "./Routes/Admin_Routes/adminApprovel.routes"
+import PatientProfileRoutes from "./Routes/Patient_Route/PatientProfile.routes"
 import { v2 as cloudinary } from "cloudinary"
 import cors from "cors"
 import cookieParser from "cookie-parser"
@@ -56,9 +57,10 @@ app.use("/api/auth", userRoute)
 app.use("/api/my/hospital", hospitalcreate)
 app.use("/api/manage", manageHospitalRoute)
 
-// Appoinment Route
+// patient or appoinemt Route
 app.use("/api/appoinment", appoinmentRoute)
 app.use("/api/manappoinemt", manAppoinmentRoute)
+app.use("/api/patient", PatientProfileRoutes)
 // Doctors route
 app.use("/api/doctor", doctorsRoute)
 // Dashboard route

@@ -6,7 +6,6 @@ const PatientSchema: Schema = new Schema({
   dateOfBirth: { type: Date, required: true },
   gender: { type: String, required: true },
   age: { type: Number, required: true },
-
   contact: {
     phone: { type: String, required: true },
     address: { type: String },
@@ -32,6 +31,11 @@ const PatientSchema: Schema = new Schema({
       weight: { type: Number },
     },
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   visitHistory: [
     {
       lastVisitDate: { type: Date, required: true },
@@ -43,7 +47,7 @@ const PatientSchema: Schema = new Schema({
     provider: { type: String },
     policyNumber: { type: String },
   },
-  documents: { type: [String], default: [] },
+  
 })
 
-export default mongoose.model<IPatient>("Patient", PatientSchema)
+export const Patient  =  mongoose.model<IPatient>("Patient", PatientSchema)
