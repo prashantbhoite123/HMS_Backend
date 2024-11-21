@@ -12,16 +12,22 @@ const getallHospital = async (
   try {
     const getallHospital = await Hospital.find()
 
-    if (!getallHospital) {
-      return next(errorHandler(500, "Hospital not found"))
+    if (!getallHospital || getallHospital.length === 0) {
+      return next(errorHandler(404, "No hospitals found"))
     }
-
-    const allHospitalData = getallHospital.filter(
+    const hospitals = getallHospital.filter(
       (hospital) => hospital.status === "Approved"
     )
+    const doctors = await Doctors.find({
+      hospitalId: { $in: hospitals.map((hospital) => hospital._id) },
+    })
 
-    console.log("all hospitals=>", allHospitalData)
-    return res.status(200).json(allHospitalData)
+    const data = {
+      hospitals,
+      doctors,
+    }
+    console.log("all hospitals=>", data)
+    return res.status(200).json(data)
   } catch (error) {
     next(error)
   }
@@ -121,12 +127,12 @@ const getHospital = async (req: Request, res: Response, next: NextFunction) => {
       return next(errorHandler(404, "Hospital not found"))
     }
 
-    // console.log(hospital)
-    console.log({ ...hospital, doctors })
-    // return res.status(200).json({
-    //   ...hospital,
-    //   doctors,
-    // })
+    const Data = {
+      hospital,
+      doctors,
+    }
+    console.log(Data)
+    return res.status(200).json(Data)
   } catch (error) {
     console.log(`Error while getRestaurant  :${error}`)
     return next(error)
