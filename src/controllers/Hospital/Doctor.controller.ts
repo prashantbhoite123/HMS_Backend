@@ -94,6 +94,7 @@ const doctorLogin = async (
 ) => {
   try {
     const { email, password } = req.body
+    console.log(req.body)
     if (!email || !password || email === "" || password === "") {
       next(errorHandler(400, "All field are required"))
     }

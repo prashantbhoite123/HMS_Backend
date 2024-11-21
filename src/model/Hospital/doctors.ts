@@ -16,6 +16,11 @@ const doctorSchema: Schema = new Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    required: true,
+    default: "Doctor",
+  },
   email: {
     type: String,
     unique: true,

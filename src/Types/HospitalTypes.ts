@@ -42,6 +42,7 @@ export interface Idoctors extends Document {
   email: string
   ownerId?: ObjectId
   hospitalId?: ObjectId
+  role: string
   password: string
   education: string
   experienceYears: number

@@ -20,6 +20,6 @@ router.post(
   doctorController.registerDoctor
 )
 
-router.post("/login", doctorController.registerDoctor)
+router.post("/login", doctorController.doctorLogin)
 
 export default router
