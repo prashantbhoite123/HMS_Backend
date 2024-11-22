@@ -8,7 +8,11 @@ const PatientSchema: Schema = new Schema({
   age: { type: Number, required: true },
   contact: {
     phone: { type: String, required: true },
-    address: { type: String },
+    address: {
+      city: { type: String, required: true, trim: true },
+      state: { type: String, required: true, trim: true },
+      country: { type: String, required: true, trim: true },
+    },
   },
   emergencyContact: {
     name: { type: String, required: true },
@@ -47,7 +51,6 @@ const PatientSchema: Schema = new Schema({
     provider: { type: String },
     policyNumber: { type: String },
   },
-  
 })
 
-export const Patient  =  mongoose.model<IPatient>("Patient", PatientSchema)
+export const Patient = mongoose.model<IPatient>("Patient", PatientSchema)

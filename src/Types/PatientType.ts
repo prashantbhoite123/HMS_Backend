@@ -8,14 +8,18 @@ export interface IPatient extends Document {
   age: number
   contact: {
     phone: string
-    address: string
+    address: {
+      city: string
+      state: string
+      country:string
+    }
   }
   emergencyContact: {
     name: string
     relation: string
     phone: string
   }
-  userId?: ObjectId
+  userId: ObjectId
   medicalHistory: {
     allergies: string[]
     chronicConditions: string[]
@@ -42,3 +46,6 @@ export interface IPatient extends Document {
     policyNumber: string
   }
 }
+
+
+  
