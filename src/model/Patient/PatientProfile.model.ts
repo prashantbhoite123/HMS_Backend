@@ -20,14 +20,14 @@ const PatientSchema: Schema = new Schema({
     phone: { type: String, required: true },
   },
   medicalHistory: {
-    allergies: { type: [String], default: [] },
-    chronicConditions: { type: [String], default: [] },
-    pastSurgeries: { type: [String], default: [] },
-    currentMedications: { type: [String], default: [] },
+    allergies: { type: String, default: "" }, 
+    chronicConditions: { type: String, default: "" }, 
+    pastSurgeries: { type: String, default: "" }, 
+    currentMedications: { type: String, default: "" }, 
   },
   currentMedicalInfo: {
     reasonForVisit: { type: String, required: true },
-    symptoms: { type: [String], required: true },
+    symptoms: { type: String, required: true }, 
     vitalSigns: {
       bloodPressure: { type: String },
       heartRate: { type: Number },
@@ -44,7 +44,7 @@ const PatientSchema: Schema = new Schema({
     {
       lastVisitDate: { type: Date, required: true },
       assignedDoctor: { type: String, required: true },
-      lastVisitReason: { type: [String], required: true },
+      lastVisitReason: { type: String, required: true }, // Changed to a single string
     },
   ],
   insurance: {

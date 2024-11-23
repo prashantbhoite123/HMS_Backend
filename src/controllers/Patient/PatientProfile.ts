@@ -9,6 +9,7 @@ const patientProfile = async (
   next: NextFunction
 ) => {
   try {
+    console.log("======>", req.body)
     if (!req.body) {
       return next(errorHandler(404, "All fields are required"))
     }
@@ -24,7 +25,7 @@ const patientProfile = async (
 
     return res
       .status(200)
-      .json({ message: "patient information submit successful" })
+      .json({ success: true, message: "patient information submit successful" })
   } catch (error: any) {
     return next(error)
   }

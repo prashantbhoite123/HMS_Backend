@@ -19,14 +19,14 @@ export interface IPatient extends Document {
   }
   userId: ObjectId
   medicalHistory: {
-    allergies: string[]
-    chronicConditions: string[]
-    pastSurgeries?: string[]
-    currentMedications?: string[]
+    allergies: string
+    chronicConditions: string
+    pastSurgeries?: string
+    currentMedications?: string
   }
   currentMedicalInfo: {
     reasonForVisit: string
-    symptoms: string[]
+    symptoms: string
     vitalSigns?: {
       bloodPressure: string
       heartRate: number
