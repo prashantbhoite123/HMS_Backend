@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken"
 import { User } from "../../model/common_Model/user.model"
 import { errorHandler } from "../../utils/error.handler"
 import { AuthenticatedRequest } from "../../Types/types"
+import { Patient } from "../../model/Patient/PatientProfile.model"
 
 const SECRETKEY = process.env.SECRETKEY
 type Props = {
@@ -66,33 +67,53 @@ const userRegistration = async (req: Request, res: Response) => {
   }
 }
 
-const userLogin = async (req: Request, res: Response, next: NextFunction) => {
+const userLogin = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { email, password } = req.body
     if (!email || !password || email === "" || password === "") {
       next(errorHandler(400, "All field are required"))
     }
-    const existHospital = await User.findOne({ email })
-    if (!existHospital) {
+    const existedUser = await User.findOne({ email })
+    if (!existedUser) {
       return errorHandler(400, "User not found")
     }
 
-    const ismatchPassword = bcryptjs.compareSync(
-      password,
-      existHospital.password
-    )
+    const ismatchPassword = bcryptjs.compareSync(password, existedUser.password)
 
     if (!ismatchPassword) {
       return errorHandler(400, "Invalid email or password")
     }
 
-    const { password: abc, ...rest } = existHospital.toObject()
-    const token = jwt.sign({ _id: existHospital._id }, SECRETKEY as string)
+    const { password: abc, ...rest } = existedUser.toObject()
+    const token = jwt.sign({ _id: existedUser._id }, SECRETKEY as string)
+
+    const decode = jwt.verify(
+      token,
+      process.env.SECRETKEY as string
+    ) as jwt.JwtPayload
+
+    console.log(decode?._id)
+
+    const existedpatientProfile = await Patient.findOne({
+      userId: decode?._id,
+    })
+
+
+    let patientproStatus = false
+    if (existedUser.role === "patient" && !existedpatientProfile) {
+      patientproStatus = true
+    }
+
+
 
     res
       .cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
       .status(200)
-      .json(rest)
+      .json({ patientproStatus, rest })
   } catch (error) {
     console.log(`Error while login hospital :${error}`)
     res.status(500).json({ message: "something went wrong" })
