@@ -1,4 +1,3 @@
-
 import { Document, ObjectId } from "mongoose"
 
 export interface IPatient extends Document {
@@ -6,13 +5,12 @@ export interface IPatient extends Document {
   dateOfBirth: Date
   gender: string
   age: number
-  contact: {
-    phone: string
-    address: {
-      city: string
-      state: string
-      country:string
-    }
+
+  phone: string
+  address: {
+    city: string
+    state: string
+    country: string
   }
   emergencyContact: {
     name: string
@@ -46,6 +44,3 @@ export interface IPatient extends Document {
     policyNumber: string
   }
 }
-
-
-  

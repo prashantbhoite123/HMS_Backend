@@ -6,14 +6,14 @@ const PatientSchema: Schema = new Schema({
   dateOfBirth: { type: Date, required: true },
   gender: { type: String, required: true },
   age: { type: Number, required: true },
-  contact: {
-    phone: { type: String, required: true },
-    address: {
-      city: { type: String, required: true, trim: true },
-      state: { type: String, required: true, trim: true },
-      country: { type: String, required: true, trim: true },
-    },
+
+  phone: { type: String, required: true },
+  address: {
+    city: { type: String, required: true, trim: true },
+    state: { type: String, required: true, trim: true },
+    country: { type: String, required: true, trim: true },
   },
+
   emergencyContact: {
     name: { type: String, required: true },
     relation: { type: String, required: true },
