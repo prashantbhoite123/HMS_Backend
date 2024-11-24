@@ -1,6 +1,17 @@
 import mongoose, { Schema, Document } from "mongoose"
 import { IPatient } from "../../Types/PatientType"
 
+const visitHistorySchema = new mongoose.Schema({
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    default: () => new mongoose.Types.ObjectId(),
+  },
+  lastVisitDate: { type: Date, required: true },
+  assignedDoctor: { type: String, required: true },
+  lastVisitReason: { type: String, required: true },
+})
+
 const PatientSchema: Schema = new Schema({
   name: { type: String, required: true },
   dateOfBirth: { type: Date, required: true },
@@ -20,14 +31,14 @@ const PatientSchema: Schema = new Schema({
     phone: { type: String, required: true },
   },
   medicalHistory: {
-    allergies: { type: String, default: "" }, 
-    chronicConditions: { type: String, default: "" }, 
-    pastSurgeries: { type: String, default: "" }, 
-    currentMedications: { type: String, default: "" }, 
+    allergies: { type: String, default: "" },
+    chronicConditions: { type: String, default: "" },
+    pastSurgeries: { type: String, default: "" },
+    currentMedications: { type: String, default: "" },
   },
   currentMedicalInfo: {
     reasonForVisit: { type: String, required: true },
-    symptoms: { type: String, required: true }, 
+    symptoms: { type: String, required: true },
     vitalSigns: {
       bloodPressure: { type: String },
       heartRate: { type: Number },
@@ -40,13 +51,7 @@ const PatientSchema: Schema = new Schema({
     ref: "User",
     required: true,
   },
-  visitHistory: [
-    {
-      lastVisitDate: { type: Date, required: true },
-      assignedDoctor: { type: String, required: true },
-      lastVisitReason: { type: String, required: true }, // Changed to a single string
-    },
-  ],
+  visitHistory: [visitHistorySchema],
   insurance: {
     provider: { type: String },
     policyNumber: { type: String },
