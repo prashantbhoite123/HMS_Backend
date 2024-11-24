@@ -10,4 +10,10 @@ router.post(
   PatientProfileController.patientProfile
 )
 
+router.get(
+  "/getpatient",
+  isAuthentication,
+  PatientProfileController.getPatientProfile
+)
+
 export default router
