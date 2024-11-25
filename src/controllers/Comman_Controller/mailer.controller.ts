@@ -14,7 +14,6 @@ export const sendDynamicEmail = async (req: Request, res: Response) => {
       user,
       pass
     )
-
     res
       .status(200)
       .json({ message: "Email sent successfully", info: emailResponse })
