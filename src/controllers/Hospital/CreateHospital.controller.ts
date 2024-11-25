@@ -36,10 +36,10 @@ const createHospital = async (
   next: NextFunction
 ) => {
   try {
-    // console.log(req.body)
     const _id = req.user?._id
+    console.log(_id)
     const existHospital = await Hospital.findOne({ owner: _id })
-    // console.log(existHospital)
+
     if (existHospital) {
       return next(errorHandler(400, "Hospital already exist"))
     }
@@ -55,10 +55,6 @@ const createHospital = async (
       owner: req.user?._id,
       picture: pictureUrl,
     })
-    // hospital.owner = new mongoose.Types.ObjectId(req.user?._id)
-
-    // console.log("this is a hospital=====>", hospital)
-    // await hospital.save()
 
     console.log("this is hospital ===>", hospital)
     return res

@@ -131,7 +131,6 @@ const getHospital = async (req: Request, res: Response, next: NextFunction) => {
       hospital,
       doctors,
     }
-    console.log(Data)
     return res.status(200).json(Data)
   } catch (error) {
     console.log(`Error while getRestaurant  :${error}`)
