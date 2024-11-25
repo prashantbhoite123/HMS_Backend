@@ -3,7 +3,7 @@ import { AuthenticatedRequest } from "../../Types/types"
 import { errorHandler } from "../../utils/error.handler"
 import Hospital from "../../model/Hospital/hospitalcreate.model"
 import { Appointment } from "../../model/Patient/Appointment"
-import { User } from "../../model/common_Model/user.model"
+
 import { IAppointment } from "../../Types/HospitalTypes"
 
 const getAllDashData = async (

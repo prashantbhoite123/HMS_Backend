@@ -3,7 +3,7 @@ import { AuthenticatedRequest } from "../../Types/types"
 import { Appointment } from "../../model/Patient/Appointment"
 import { errorHandler } from "../../utils/error.handler"
 import { sendMail } from "../../utils/mailer"
-import { param } from "express-validator"
+
 import Hospital from "../../model/Hospital/hospitalcreate.model"
 import { User } from "../../model/common_Model/user.model"
 import { generateAppointmentNumber } from "../../middleware/PatientMidd/Appt.middleware"
@@ -72,15 +72,15 @@ const getAllAppoinment = async (
   next: NextFunction
 ) => {
   try {
+    console.log(req.user?._id)
     const allAppoinment = await Appointment.find({
       petientId: req.user?._id,
     }).populate("hospitalId", "hospitalName")
 
-    const hospitalName = await Hospital.findOne({})
     if (!allAppoinment) {
       return next(errorHandler(404, "appoinment  does not exist"))
     }
-
+    console.log("====>", allAppoinment)
     return res.status(200).json(allAppoinment)
   } catch (error: any) {
     console.log("something went wrong")

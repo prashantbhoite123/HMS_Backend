@@ -26,7 +26,7 @@ const getallHospital = async (
       hospitals,
       doctors,
     }
-    console.log("all hospitals=>", data)
+
     return res.status(200).json(data)
   } catch (error) {
     next(error)
