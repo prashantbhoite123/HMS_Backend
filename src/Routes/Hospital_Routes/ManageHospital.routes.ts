@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get(
   "/gethospitals",
-  // isAuthentication,
+  isAuthentication,
   ManageHospital.getallHospital
 )
 router.get("/search/", isAuthentication, ManageHospital.searchHospital)

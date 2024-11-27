@@ -86,11 +86,15 @@ const searchHospital = async (
 
     const pageSize = 5
     const skip = (page - 1) * pageSize
-    const hospitals = await Hospital.find(query)
+    const SearchHospitals = await Hospital.find(query)
       .sort({ [sortOption]: -1 })
       .skip(skip)
       .limit(pageSize)
       .lean()
+
+    const hospitals = SearchHospitals.filter(
+      (hospital) => hospital.status === "Approved"
+    )
 
     const total = await Hospital.countDocuments(query)
 
