@@ -12,20 +12,17 @@ const approvelHospitals = async (
   next: NextFunction
 ) => {
   try {
-    const hospitals = await Hospital.find()
-    if (!hospitals) {
-      return next(errorHandler(404, " Hospitals not found"))
+    const { hospitalId } = req.params
+
+    if (!hospitalId) {
+      return next(errorHandler(404, "Hospital Id  not found"))
+    }
+    const hospital = await Hospital.findById(hospitalId)
+    if (!hospital) {
+      return next(errorHandler(404, "Hospital not found"))
     }
 
-    const pendingHospital = hospitals.filter(
-      (hospital) => hospital.status === "Pending"
-    )
-
-    if (!pendingHospital) {
-      return next(errorHandler(404, "pending hospitals not found"))
-    }
-
-    return res.status(200).json(pendingHospital)
+    return res.status(200).json(hospital)
   } catch (error: any) {
     return next(error)
   }

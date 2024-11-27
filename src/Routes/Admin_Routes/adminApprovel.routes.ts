@@ -5,7 +5,7 @@ import adminRequestedhospital from "../../controllers/Admin/approvelHospital.con
 const router = express.Router()
 
 router.get(
-  "/aprovelhos",
+  "/aprovelhos/:hospitalId",
   isAuthentication,
   adminRequestedhospital.approvelHospitals
 )
