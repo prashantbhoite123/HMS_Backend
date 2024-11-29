@@ -1,6 +1,25 @@
 import mongoose, { Schema } from "mongoose"
 import { Idoctors } from "../../Types/HospitalTypes"
 
+
+
+export interface Doctordocument extends Document {
+  _id: any
+
+  doctorName: string
+  email: string
+  password: string
+  role: string
+  profilePic: string
+  degree: string
+  ownerId: string
+  hospitalId: string
+  education: string
+  specialization: string
+  workingHours:string
+}
+
+
 const doctorSchema: Schema = new Schema({
   doctorName: {
     type: String,

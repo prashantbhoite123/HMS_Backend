@@ -6,6 +6,7 @@ import { Appointment } from "../../model/Patient/Appointment"
 import { User } from "../../model/common_Model/user.model"
 import { Doctors } from "../../model/Hospital/doctors"
 import { IAppointment } from "../../Types/HospitalTypes"
+import { Patient } from "../../model/Patient/PatientProfile.model"
 
 const filterAppointmentsByStatus = (
   appointments: IAppointment[],
@@ -188,7 +189,8 @@ const adminDashData = async () => {
   }
 }
 
-const doctorDashData = async (req: AuthenticatedRequest) => {
+export const doctorDashData = async (req: AuthenticatedRequest) => {
+  console.log(req.user)
   const doctor = await Doctors.findById(req.user?._id)
   if (!doctor) throw errorHandler(404, "Doctor not found")
 
@@ -209,25 +211,69 @@ const doctorDashData = async (req: AuthenticatedRequest) => {
     "Completed"
   )
 
+  const now = new Date()
+  const oneMonthAgo = new Date()
+  oneMonthAgo.setMonth(now.getMonth() - 1)
+
+  const lastMonthAppointments = await Appointment.find({
+    doctorName: doctor?.doctorName,
+    createdAt: { $gte: oneMonthAgo, $lte: now },
+  })
+
+  // Last month's appointments by status
+  const lastMonthPending = filterAppointmentsByStatus(
+    lastMonthAppointments,
+    "Pending"
+  )
+  const lastMonthCancelled = filterAppointmentsByStatus(
+    lastMonthAppointments,
+    "Cancelled"
+  )
+  const lastMonthCompleted = filterAppointmentsByStatus(
+    lastMonthAppointments,
+    "Completed"
+  )
+
+  // Latest appointments
   const latestAppointments = await Appointment.find({
     doctorName: doctor?.doctorName,
   })
     .sort({ createdAt: -1 })
     .limit(5)
 
-  const todayAppointments = await getTodayAppointments({
+  // Today's appointments
+  const todayAppointments = await Appointment.find({
     doctorName: doctor?.doctorName,
+    createdAt: {
+      $gte: new Date().setHours(0, 0, 0, 0),
+      $lte: new Date().setHours(23, 59, 59, 999),
+    },
+  })
+
+  // Extract unique patient IDs from all appointments
+  const patientIds = allAppointments.map((appointment) => appointment.petientId)
+  const uniquePatientIds = Array.from(new Set(patientIds))
+
+  // Fetch unique patients
+  const allPatients = await Patient.find({
+    userId: { $in: uniquePatientIds },
   })
 
   return {
     dashData: {
-      latestAppointments,
-      todayAppointments,
-      pendingAppointments,
-      cancelledAppointments,
-      completedAppointments,
+      pendingAppointments: pendingAppointments.length,
+      cancelledAppointments: cancelledAppointments.length,
+      completedAppointments: completedAppointments.length,
+      lastMonth: {
+        pending: lastMonthPending.length,
+        cancelled: lastMonthCancelled.length,
+        completed: lastMonthCompleted.length,
+      },
     },
-    allAppointments,
+    latestAppointments,
+    todayAppointments,
+    allAppointments: allAppointments,
+    allPatients,
     doctor,
   }
 }
@@ -237,26 +283,25 @@ const getAllDashData = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log("hello world")
+  console.log("===>", req?.user)
   try {
     if (!req.user?._id) {
       return next(errorHandler(401, "User ID not found"))
     }
 
     let data
-    switch (req.user.role) {
-      case "hospital":
-        data = await hospitalDashData(req)
-        break
-      case "Admin":
-        data = await adminDashData()
-        break
-      case "Doctor":
-        data = await doctorDashData(req)
-        break
-      default:
-        throw errorHandler(403, "Unauthorized role")
+    if (req.user.role === "hospital") {
+      data = await hospitalDashData(req)
+    } else if (req.user.role === "Admin") {
+      data = await adminDashData()
+    } else if (req.user.role === "Doctor") {
+      data = await doctorDashData(req)
+    } else {
+      throw errorHandler(403, "Unauthorized role")
     }
 
+    console.log(data)
     return res.json(data)
   } catch (error: any) {
     return next(errorHandler(400, error.message || "Failed to fetch data"))
