@@ -10,6 +10,7 @@ export interface IAppointment extends Document {
   appTime: string
   reason: string
   status: string
+  createdAt: Date
 }
 
 export interface IHospital extends Document {
