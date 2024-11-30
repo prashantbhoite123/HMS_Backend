@@ -69,7 +69,15 @@ export const updatePatientProfile = async (
     if (!patient) {
       return next(errorHandler(404, "Patient not found"))
     }
-
+    if (req.body.visitHistory && !Array.isArray(req.body.visitHistory)) {
+      req.body.visitHistory = Object.values(req.body.visitHistory)
+    }
+    const { name, age, visitHistory } = req.body
+    if (!name || !age || !visitHistory?.length) {
+      return next(
+        errorHandler(400, "Name, age, and visit history are required")
+      )
+    }
     const updatedProfile = await Patient.findByIdAndUpdate(
       patient._id,
       {
