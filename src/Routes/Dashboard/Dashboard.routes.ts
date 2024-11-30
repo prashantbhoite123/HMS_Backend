@@ -6,5 +6,10 @@ const router = express.Router()
 
 router.get("/dashdata", isAuthentication, Dashcontroller.getAllDashData)
 router.put("/cancel/:appId", isAuthentication, ManageDashboard.cancelAppoinment)
+router.put(
+  "/schedule/:appId",
+  isAuthentication,
+  ManageDashboard.scheduleAppoinment
+)
 
 export default router

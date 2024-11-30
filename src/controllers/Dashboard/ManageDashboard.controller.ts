@@ -82,6 +82,43 @@ const cancelAppoinment = async (
   }
 }
 
+const scheduleAppoinment = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { appId } = req.params
+    if (!appId) {
+      return next(errorHandler(404, "appoinment id not found"))
+    }
+
+    const appoinment = await Appointment.findById(appId)
+
+    if (!appoinment) {
+      return next(errorHandler(404, "Appoinment not found"))
+    }
+
+    const scheduleApp = await Appointment.findByIdAndUpdate(
+      appoinment?._id,
+      {
+        $set: {
+          status: "Completed",
+        },
+      },
+      { new: true }
+    )
+
+    if (!scheduleApp) {
+      return next(errorHandler(400, "Failed to Schedule appoinment"))
+    }
+
+    return res.status(200).json({ message: "Appoinment Schedule successFull" })
+  } catch (error: any) {
+    return next(error)
+  }
+}
 export default {
   cancelAppoinment,
+  scheduleAppoinment,
 }
