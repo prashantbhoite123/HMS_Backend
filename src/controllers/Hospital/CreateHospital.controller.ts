@@ -83,9 +83,13 @@ const updateHospital = async (
     }
 
     // const updatedHospital = await Hospital.create(req.body)
-    const updatedHospital = await Hospital.findByIdAndUpdate(hospital.id, {
-      $set: { ...req.body },
-    })
+    const updatedHospital = await Hospital.findByIdAndUpdate(
+      hospital.id,
+      {
+        $set: { ...req.body },
+      },
+      { new: true }
+    )
 
     res.status(200).send(updatedHospital)
   } catch (error) {

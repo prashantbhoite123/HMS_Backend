@@ -16,4 +16,10 @@ router.get(
   PatientProfileController.getPatientProfile
 )
 
+router.put(
+  "/update",
+  isAuthentication,
+  PatientProfileController.updatePatientProfile
+)
+
 export default router

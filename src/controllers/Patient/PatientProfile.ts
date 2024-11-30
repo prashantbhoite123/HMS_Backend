@@ -55,7 +55,38 @@ export const patientProfile = async (
   }
 }
 
+export const updatePatientProfile = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.body) {
+      return next(errorHandler(404, "User data is required"))
+    }
+    const patient = await Patient.findOne({ userId: req.user?._id })
+
+    if (!patient) {
+      return next(errorHandler(404, "Patient not found"))
+    }
+
+    const updatedProfile = await Patient.findByIdAndUpdate(
+      patient._id,
+      {
+        $set: {
+          ...req.body,
+        },
+      },
+      { new: true }
+    )
+
+    res.status(200).json({ message: "Profile updated successfull" })
+  } catch (error: any) {
+    return next(error)
+  }
+}
 export default {
+  updatePatientProfile,
   patientProfile,
   getPatientProfile,
 }

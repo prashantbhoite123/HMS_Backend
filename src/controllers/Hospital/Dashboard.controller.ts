@@ -220,7 +220,7 @@ export const doctorDashData = async (req: AuthenticatedRequest) => {
     createdAt: { $gte: oneMonthAgo, $lte: now },
   })
 
-  // Last month's appointments by status
+  
   const lastMonthPending = filterAppointmentsByStatus(
     lastMonthAppointments,
     "Pending"
@@ -234,14 +234,14 @@ export const doctorDashData = async (req: AuthenticatedRequest) => {
     "Completed"
   )
 
-  // Latest appointments
+  
   const latestAppointments = await Appointment.find({
     doctorName: doctor?.doctorName,
   })
     .sort({ createdAt: -1 })
     .limit(5)
 
-  // Today's appointments
+  
   const todayAppointments = await Appointment.find({
     doctorName: doctor?.doctorName,
     createdAt: {
@@ -250,14 +250,20 @@ export const doctorDashData = async (req: AuthenticatedRequest) => {
     },
   })
 
-  // Extract unique patient IDs from all appointments
+  
   const patientIds = allAppointments.map((appointment) => appointment.petientId)
   const uniquePatientIds = Array.from(new Set(patientIds))
 
-  // Fetch unique patients
+  
   const allPatients = await Patient.find({
     userId: { $in: uniquePatientIds },
   })
+
+  const chartData = await Appointment.aggregate([
+    { $group: { _id: { $month: "$date" }, count: { $sum: 1 } } },
+    { $project: { month: "$_id", count: 1, _id: 0 } },
+    { $sort: { month: 1 } },
+  ])
 
   return {
     dashData: {
@@ -275,6 +281,7 @@ export const doctorDashData = async (req: AuthenticatedRequest) => {
     allAppointments: allAppointments,
     allPatients,
     doctor,
+    chartData,
   }
 }
 
@@ -301,7 +308,7 @@ const getAllDashData = async (
       throw errorHandler(403, "Unauthorized role")
     }
 
-    console.log(data)
+    
     return res.json(data)
   } catch (error: any) {
     return next(errorHandler(400, error.message || "Failed to fetch data"))
