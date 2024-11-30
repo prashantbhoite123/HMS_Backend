@@ -28,8 +28,8 @@ const patientAppoinment = async (
       req.body.patientName as string
     )
 
-    console.log(req.body.patientName)
-    console.log("this is appoinment", appoinmentNum)
+    
+    
     const newAppoinment = await Appointment.create({
       ...req.body,
       petientId: petientId,
@@ -37,7 +37,7 @@ const patientAppoinment = async (
       apptNumber: appoinmentNum,
     })
 
-    console.log(newAppoinment)
+    
 
     const hospitalemail = await Hospital.findById(newAppoinment.hospitalId)
 
@@ -72,7 +72,6 @@ const getAllAppoinment = async (
   next: NextFunction
 ) => {
   try {
-    console.log(req.user?._id)
     const allAppoinment = await Appointment.find({
       petientId: req.user?._id,
     }).populate("hospitalId", "hospitalName")
@@ -80,7 +79,7 @@ const getAllAppoinment = async (
     if (!allAppoinment) {
       return next(errorHandler(404, "appoinment  does not exist"))
     }
-    console.log("====>", allAppoinment)
+
     return res.status(200).json(allAppoinment)
   } catch (error: any) {
     console.log("something went wrong")

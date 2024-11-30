@@ -37,7 +37,7 @@ const createHospital = async (
 ) => {
   try {
     const _id = req.user?._id
-    console.log(_id)
+    
     const existHospital = await Hospital.findOne({ owner: _id })
 
     if (existHospital) {
@@ -56,7 +56,7 @@ const createHospital = async (
       picture: pictureUrl,
     })
 
-    console.log("this is hospital ===>", hospital)
+    
     return res
       .status(200)
       .json({ success: true, message: "Hospital create successfull", hospital })
@@ -82,7 +82,7 @@ const updateHospital = async (
       req.body.picture = picture
     }
 
-    // const updatedHospital = await Hospital.create(req.body)
+    
     const updatedHospital = await Hospital.findByIdAndUpdate(
       hospital.id,
       {

@@ -45,7 +45,7 @@ const deleteAppoinment = async (
 ) => {
   try {
     const { appId } = req.params
-    console.log("this appId:", appId)
+    
 
     if (!appId) {
       return next(errorHandler(500, "Patient id not found"))
