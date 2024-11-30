@@ -190,7 +190,7 @@ const adminDashData = async () => {
 }
 
 export const doctorDashData = async (req: AuthenticatedRequest) => {
-  console.log(req.user)
+  
   const doctor = await Doctors.findById(req.user?._id)
   if (!doctor) throw errorHandler(404, "Doctor not found")
 
@@ -290,8 +290,7 @@ const getAllDashData = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("hello world")
-  console.log("===>", req?.user)
+ 
   try {
     if (!req.user?._id) {
       return next(errorHandler(401, "User ID not found"))

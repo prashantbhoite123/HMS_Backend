@@ -80,7 +80,9 @@ export const updatePatientProfile = async (
       { new: true }
     )
 
-    res.status(200).json({ message: "Profile updated successfull" })
+    res
+      .status(200)
+      .json({ message: "Profile updated successfull", updatedProfile })
   } catch (error: any) {
     return next(error)
   }
