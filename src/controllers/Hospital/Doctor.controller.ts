@@ -32,7 +32,7 @@ const registerDoctor = async (
       return next(errorHandler(400, "doctor already exist"))
     }
 
-    const profilePic = await uploadBsase64(req.body.profilePic)
+    const profilePic = await uploadBsase64(req.body.profilepic)
 
     if (!profilePic) {
       return next(errorHandler(400, "Profile Url not found"))
@@ -48,7 +48,7 @@ const registerDoctor = async (
       ...req.body,
       password: decriptedPass,
       ownerId: req.user?._id,
-      profilePic: profilePic,
+      profilepic: profilePic,
       degree: degreeUrl,
       hospitalId: hospitalId,
     })

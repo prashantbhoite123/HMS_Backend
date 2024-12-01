@@ -24,7 +24,7 @@ router.put(
 router.get(
   "/getinfo/:patientId",
   isAuthentication,
-  PatientProfileController.updatePatientProfile
+  PatientProfileController.detailPatientProfile
 )
 
 export default router

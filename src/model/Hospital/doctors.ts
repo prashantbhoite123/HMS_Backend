@@ -10,13 +10,13 @@ export interface Doctordocument extends Document {
   email: string
   password: string
   role: string
-  profilePic: string
+  profilepic: string
   degree: string
   ownerId: string
   hospitalId: string
   education: string
   specialization: string
-  workingHours:string
+  workingHours: string
 }
 
 
@@ -26,7 +26,7 @@ const doctorSchema: Schema = new Schema({
     required: true,
     trim: true,
   },
-  profilePic: {
+  profilepic: {
     type: String,
     default:
       "https://www.shutterstock.com/image-vector/doctor-icon-260nw-224509450.jpg",
