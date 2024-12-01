@@ -121,7 +121,31 @@ const doctorLogin = async (
     res.status(500).json({ message: "something went wrong" })
   }
 }
+
+const doctorDetail = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { doctorId } = req.params
+
+    if (!doctorId) {
+      return next(errorHandler(404, "Doctor id not found"))
+    }
+
+    const doctor = await Doctors.findById(doctorId)
+    if (!doctor) {
+      return next(errorHandler(404, "Doctor not found"))
+    }
+
+    return res.status(200).json(doctor)
+  } catch (error: any) {
+    return next(error)
+  }
+}
 export default {
   doctorLogin,
   registerDoctor,
+  doctorDetail,
 }
