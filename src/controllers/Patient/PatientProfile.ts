@@ -107,7 +107,7 @@ export const detailPatientProfile = async (
       return next(errorHandler(404, "Patient id not found"))
     }
 
-    const patientinfo = await Patient.findById(patientId)
+    const patientinfo = await Patient.findOne({ userId: patientId })
 
     if (!patientId) {
       return next(errorHandler(404, "patient not found"))
