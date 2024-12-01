@@ -95,7 +95,31 @@ export const updatePatientProfile = async (
     return next(error)
   }
 }
+
+export const detailPatientProfile = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { patientId } = req.params
+    if (!patientId) {
+      return next(errorHandler(404, "Patient id not found"))
+    }
+
+    const patientinfo = await Patient.findById(patientId)
+
+    if (!patientId) {
+      return next(errorHandler(404, "patient not found"))
+    }
+
+    return res.status(200).json(patientinfo)
+  } catch (error: any) {
+    return next(error)
+  }
+}
 export default {
+  detailPatientProfile,
   updatePatientProfile,
   patientProfile,
   getPatientProfile,
