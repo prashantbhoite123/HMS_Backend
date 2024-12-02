@@ -19,7 +19,7 @@ router.get("/logout", userAuthController.logoutUser)
 router.post("/send-email", isAuthentication, sendDynamicEmail)
 router.put(
   "/updateprofile",
-  upload.single("picture"),
+  upload.single("profilepic"),
   isAuthentication,
   userAuthController.updateUserProfile
 )
