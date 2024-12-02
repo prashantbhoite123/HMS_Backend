@@ -2,10 +2,26 @@ import express from "express"
 import userAuthController from "../../controllers/Comman_Controller/userAuth.controller"
 import { isAuthentication } from "../../middleware/Auth.middleware"
 import { sendDynamicEmail } from "../../controllers/Comman_Controller/mailer.controller"
+import multer from "multer"
 
 const router = express.Router()
 
+const storage = multer.memoryStorage()
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5mb
+  },
+})
+
 router.get("/logout", userAuthController.logoutUser)
 router.post("/send-email", isAuthentication, sendDynamicEmail)
+router.put(
+  "/updateprofile",
+  upload.single("picture"),
+  isAuthentication,
+  userAuthController.updateUserProfile
+)
 
 export default router
