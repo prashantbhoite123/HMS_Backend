@@ -13,10 +13,8 @@ const logoutUser = async (
 ) => {
   try {
     const user = await User.findById(req.user?._id)
-    console.log(req.user)
-    if (!user) {
-      return next(errorHandler(404, "User not found"))
-    }
+    // console.log("",req.user)
+
     res.clearCookie("token", { httpOnly: true, secure: true })
     if (user && user.admin) {
       user.admin.logedin = false
@@ -47,12 +45,12 @@ const updateUserProfile = async (
 ) => {
   try {
     console.log(req.body)
-
+    const { userId } = req.params
     if (!req.body) {
       return next(errorHandler(404, "All fields are required"))
     }
 
-    const user = await User.findById(req.user?._id)
+    const user = await User.findById(userId)
     if (!user) {
       return next(errorHandler(404, "User not found"))
     }
@@ -64,25 +62,30 @@ const updateUserProfile = async (
 
     const pictureUrl = await uploadImage(req.file as Express.Multer.File)
 
-    const bcryptedPass = bcryptjs.hashSync(req.body.password, 10)
+    if (req.body.password) {
+      req.body.password = bcryptjs.hashSync(req.body.password, 10)
+    }
     const updatedUser = await User.findByIdAndUpdate(
       user._id,
       {
         $set: {
           ...req.body,
-          password: bcryptedPass,
           profilepic: pictureUrl || user.profilepic,
         },
       },
       { new: true }
     )
+
+    console.log("updated User", updatedUser)
     if (!updatedUser) {
       return next(errorHandler(400, "failed to update user"))
     }
 
     const { password, ...rest } = updatedUser.toObject()
-    console.log(rest)
-    return res.status(200).json(rest)
+    console.log("rest ====>", rest)
+    return res
+      .status(200)
+      .json({ success: true, message: "user successfuly updated", rest })
   } catch (error: any) {
     return next(error)
   }

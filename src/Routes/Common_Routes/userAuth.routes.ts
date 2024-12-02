@@ -15,10 +15,10 @@ const upload = multer({
   },
 })
 
-router.get("/logout", userAuthController.logoutUser)
+router.get("/logout", isAuthentication, userAuthController.logoutUser)
 router.post("/send-email", isAuthentication, sendDynamicEmail)
 router.put(
-  "/updateprofile",
+  "/updateprofile/:userId",
   upload.single("profilepic"),
   isAuthentication,
   userAuthController.updateUserProfile

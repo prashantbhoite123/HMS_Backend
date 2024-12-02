@@ -67,9 +67,6 @@ const hospitalDashData = async (req: AuthenticatedRequest) => {
     { $sort: { month: 1 } },
   ])
 
-  // User profile data
-  const ProfileData = await User.findById(req.user?._id)
-
   return {
     CardData: {
       totalAppoinments: allAppointments.length,
@@ -90,7 +87,6 @@ const hospitalDashData = async (req: AuthenticatedRequest) => {
     ),
     allAppointments,
     totalDoctors,
-    ProfileData,
   }
 }
 
@@ -165,8 +161,6 @@ const adminDashData = async () => {
     { $sort: { month: 1 } },
   ])
 
-  const ProfileData = await User.findOne({ role: "Admin" })
-
   return {
     dashCard: {
       totalApprovedHospital: totalApprovedHospital.length,
@@ -185,12 +179,10 @@ const adminDashData = async () => {
     chartData,
     PendingHospital: totalPendingHospital,
     ApprovedHospital: totalApprovedHospital,
-    ProfileData,
   }
 }
 
 export const doctorDashData = async (req: AuthenticatedRequest) => {
-  
   const doctor = await Doctors.findById(req.user?._id)
   if (!doctor) throw errorHandler(404, "Doctor not found")
 
@@ -220,7 +212,6 @@ export const doctorDashData = async (req: AuthenticatedRequest) => {
     createdAt: { $gte: oneMonthAgo, $lte: now },
   })
 
-  
   const lastMonthPending = filterAppointmentsByStatus(
     lastMonthAppointments,
     "Pending"
@@ -234,14 +225,12 @@ export const doctorDashData = async (req: AuthenticatedRequest) => {
     "Completed"
   )
 
-  
   const latestAppointments = await Appointment.find({
     doctorName: doctor?.doctorName,
   })
     .sort({ createdAt: -1 })
     .limit(5)
 
-  
   const todayAppointments = await Appointment.find({
     doctorName: doctor?.doctorName,
     createdAt: {
@@ -250,11 +239,9 @@ export const doctorDashData = async (req: AuthenticatedRequest) => {
     },
   })
 
-  
   const patientIds = allAppointments.map((appointment) => appointment.petientId)
   const uniquePatientIds = Array.from(new Set(patientIds))
 
-  
   const allPatients = await Patient.find({
     userId: { $in: uniquePatientIds },
   })
@@ -290,7 +277,6 @@ const getAllDashData = async (
   res: Response,
   next: NextFunction
 ) => {
- 
   try {
     if (!req.user?._id) {
       return next(errorHandler(401, "User ID not found"))
@@ -307,7 +293,6 @@ const getAllDashData = async (
       throw errorHandler(403, "Unauthorized role")
     }
 
-    
     return res.json(data)
   } catch (error: any) {
     return next(errorHandler(400, error.message || "Failed to fetch data"))

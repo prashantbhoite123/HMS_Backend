@@ -73,16 +73,20 @@ const userLogin = async (
   next: NextFunction
 ) => {
   try {
+    console.log(req.body)
     const { email, password } = req.body
     if (!email || !password || email === "" || password === "") {
       next(errorHandler(400, "All field are required"))
     }
     const existedUser = await User.findOne({ email })
+
+    console.log(existedUser)
     if (!existedUser) {
       return errorHandler(400, "User not found")
     }
 
     const ismatchPassword = bcryptjs.compareSync(password, existedUser.password)
+    console.log(ismatchPassword, password)
 
     if (!ismatchPassword) {
       return errorHandler(400, "Invalid email or password")
@@ -102,13 +106,10 @@ const userLogin = async (
       userId: decode?._id,
     })
 
-
     let patientproStatus = false
     if (existedUser.role === "patient" && !existedpatientProfile) {
       patientproStatus = true
     }
-
-
 
     res
       .cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })

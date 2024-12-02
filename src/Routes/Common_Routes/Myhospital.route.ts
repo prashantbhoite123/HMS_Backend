@@ -6,10 +6,7 @@ import {
   validationHospitalRequest,
 } from "../../middleware/CommonMidd/validation"
 import { isAuthentication } from "../../middleware/Auth.middleware"
-// import {
-//   validationHospitalLogin,
-//   validationHospitalRequest,
-// } from "../middleware/validation/"
+
 
 const router = express.Router()
 
