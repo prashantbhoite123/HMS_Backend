@@ -45,6 +45,15 @@ export interface Idoctors extends Document {
   hospitalId?: ObjectId
   role: string
   password: string
+  gender: string
+  address: {
+    city: string
+    state: string
+    country: string
+  }
+  age: number
+  phone: string
+  dateOfBirth: Date
   education: string
   experienceYears: number
   specialization: string

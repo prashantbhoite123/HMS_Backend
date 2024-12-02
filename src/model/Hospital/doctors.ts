@@ -1,8 +1,6 @@
 import mongoose, { Schema } from "mongoose"
 import { Idoctors } from "../../Types/HospitalTypes"
 
-
-
 export interface Doctordocument extends Document {
   _id: any
 
@@ -18,7 +16,6 @@ export interface Doctordocument extends Document {
   specialization: string
   workingHours: string
 }
-
 
 const doctorSchema: Schema = new Schema({
   doctorName: {
@@ -57,6 +54,18 @@ const doctorSchema: Schema = new Schema({
     type: String,
     required: true,
   },
+  gender: {
+    type: String,
+    required: true,
+  },
+  address: {
+    city: { type: String, required: true, trim: true },
+    state: { type: String, required: true, trim: true },
+    country: { type: String, required: true, trim: true },
+  },
+  age: { type: Number, required: true },
+  phone: { type: String, required: true },
+  dateOfBirth: { type: Date, required: true },
   education: {
     type: String,
     required: true,

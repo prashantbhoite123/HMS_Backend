@@ -15,6 +15,8 @@ const registerDoctor = async (
   try {
     const { hospitalId } = req.params
 
+    console.log(req.body)
+
     if (!hospitalId) {
       return next(errorHandler(404, "Hospital Id required"))
     }
@@ -32,6 +34,7 @@ const registerDoctor = async (
       return next(errorHandler(400, "doctor already exist"))
     }
 
+    
     const profilePic = await uploadBsase64(req.body.profilepic)
 
     if (!profilePic) {
@@ -40,7 +43,6 @@ const registerDoctor = async (
 
     console.log("this is profile pic Url", profilePic)
 
-    // const profilePicUrl = await uploadImage(profilePic)
     const degreeUrl = await uploadImage(req.file as Express.Multer.File)
     console.log("degree url===>", degreeUrl)
     const decriptedPass = bcryptjs.hashSync(req.body.password, 10)
@@ -52,11 +54,10 @@ const registerDoctor = async (
       degree: degreeUrl,
       hospitalId: hospitalId,
     })
+    console.log("====>", newDoctor)
     return res
       .status(200)
       .json({ success: true, message: "Doctor register successful" })
-
-    console.log("====>", newDoctor)
   } catch (error: any) {
     return next(error)
   }
@@ -71,7 +72,7 @@ const uploadImage = async (file: Express.Multer.File) => {
 
     return uploadResponse.url
   } catch (error: any) {
-    throw new Error("failed to upload image to cloudinary")
+    throw new Error("failed to upload degree image to cloudinary")
   }
 }
 const uploadBsase64 = async (url: string) => {
@@ -83,7 +84,7 @@ const uploadBsase64 = async (url: string) => {
 
     return uploadResponse.url
   } catch (error: any) {
-    throw new Error("failed to upload image to cloudinary")
+    throw new Error("failed to upload profile image to cloudinary")
   }
 }
 
