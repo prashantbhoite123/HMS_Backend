@@ -23,5 +23,9 @@ router.put(
   isAuthentication,
   userAuthController.updateUserProfile
 )
-
+router.delete(
+  "/delete/:userId",
+  isAuthentication,
+  userAuthController.deleteUser
+)
 export default router

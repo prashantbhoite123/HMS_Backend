@@ -29,4 +29,10 @@ router.put(
   doctorController.updateDoctor
 )
 
+router.delete(
+  "/delete/:doctorId",
+  isAuthentication,
+  doctorController.deleteDoctor
+)
+
 export default router

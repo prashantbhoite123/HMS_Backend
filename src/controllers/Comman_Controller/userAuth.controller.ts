@@ -99,7 +99,37 @@ const uploadImage = async (file: Express.Multer.File) => {
 
   return uploadResponse.url
 }
+
+const deleteUser = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { userId } = req.params
+
+    if (!userId) {
+      return next(errorHandler(404, "userId is Required"))
+    }
+
+    const existedUser = await User.findById(userId)
+
+    if (!existedUser) {
+      return next(errorHandler(404, "User not found"))
+    }
+    const deletedUser = await User.findByIdAndDelete(existedUser._id)
+
+    res.clearCookie("token", { httpOnly: true, secure: true })
+    return res
+      .status(200)
+      .json({ success: true, message: "User successfuly deleted" })
+  } catch (error: any) {
+    return next(error)
+  }
+}
+
 export default {
   logoutUser,
   updateUserProfile,
+  deleteUser,
 }

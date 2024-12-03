@@ -195,9 +195,39 @@ const doctorDetail = async (
     return next(error)
   }
 }
+
+const deleteDoctor = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { doctorId } = req.params
+
+    if (!doctorId) {
+      return next(errorHandler(404, "doctorId is Required"))
+    }
+
+    const existedDoctor = await Doctors.findById(doctorId)
+
+    if (!existedDoctor) {
+      return next(errorHandler(404, "Doctor not found"))
+    }
+    const deletedUser = await Doctors.findByIdAndDelete(existedDoctor._id)
+
+    res.clearCookie("token", { httpOnly: true, secure: true })
+    return res
+      .status(200)
+      .json({ success: true, message: "Doctor successfuly deleted" })
+  } catch (error: any) {
+    return next(error)
+  }
+}
+
 export default {
   doctorLogin,
   registerDoctor,
   doctorDetail,
   updateDoctor,
+  deleteDoctor,
 }
