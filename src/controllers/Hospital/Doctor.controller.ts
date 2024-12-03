@@ -70,7 +70,7 @@ const updateDoctor = async (
   try {
     const { doctorId } = req.params
     if (!doctorId) {
-      return next(errorHandler(404, "Doctor Id not found"))
+      return next(errorHandler(404, "DoctorId not found"))
     }
 
     if (!req.body) {
