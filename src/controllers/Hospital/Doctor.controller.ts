@@ -34,7 +34,6 @@ const registerDoctor = async (
       return next(errorHandler(400, "doctor already exist"))
     }
 
-    
     const profilePic = await uploadBsase64(req.body.profilepic)
 
     if (!profilePic) {
@@ -58,6 +57,59 @@ const registerDoctor = async (
     return res
       .status(200)
       .json({ success: true, message: "Doctor register successful" })
+  } catch (error: any) {
+    return next(error)
+  }
+}
+
+const updateDoctor = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { doctorId } = req.params
+    if (!doctorId) {
+      return next(errorHandler(404, "Doctor Id not found"))
+    }
+
+    if (!req.body) {
+      return next(errorHandler(404, "Data is required"))
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: "Profile pic file is required" })
+    }
+
+    const newprofilePic = await uploadImage(req.file as Express.Multer.File)
+
+    const doctor = await Doctors.findById(doctorId)
+    if (!doctor) {
+      return next(errorHandler(404, "Doctor not found"))
+    }
+
+    if (req.body.password) {
+      req.body.password = bcryptjs.hashSync(req.body.password, 10)
+    }
+
+    const updateDoctor = await Doctors.findByIdAndUpdate(
+      doctor._id,
+      {
+        $set: {
+          ...req.body,
+          profilepic: newprofilePic || doctor.profilePic,
+        },
+      },
+      { new: true }
+    )
+    if (!updateDoctor) {
+      return next(errorHandler(400, "failed to update doctor"))
+    }
+
+    const { password, ...rest } = updateDoctor.toObject()
+    return res
+      .status(200)
+      .json({ success: true, message: "Doctor successfuly update", rest })
   } catch (error: any) {
     return next(error)
   }
@@ -149,4 +201,5 @@ export default {
   doctorLogin,
   registerDoctor,
   doctorDetail,
+  updateDoctor,
 }

@@ -267,7 +267,6 @@ export const doctorDashData = async (req: AuthenticatedRequest) => {
     todayAppointments,
     allAppointments: allAppointments,
     allPatients,
-    doctor,
     chartData,
   }
 }

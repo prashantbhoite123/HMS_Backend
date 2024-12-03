@@ -22,5 +22,6 @@ router.post(
 
 router.post("/login", doctorController.doctorLogin)
 router.get("/detail/:doctorId", isAuthentication, doctorController.doctorDetail)
+router.get("/update/:doctorId", isAuthentication, doctorController.updateDoctor)
 
 export default router
