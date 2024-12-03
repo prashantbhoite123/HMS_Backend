@@ -76,12 +76,10 @@ const updateDoctor = async (
     if (!req.body) {
       return next(errorHandler(404, "Data is required"))
     }
-
-    if (!req.file) {
-      return res.status(400).json({ message: "Profile pic file is required" })
+    let newProfilePic
+    if (req.file) {
+      newProfilePic = await uploadImage(req.file as Express.Multer.File)
     }
-
-    const newprofilePic = await uploadImage(req.file as Express.Multer.File)
 
     const doctor = await Doctors.findById(doctorId)
     if (!doctor) {
@@ -97,7 +95,7 @@ const updateDoctor = async (
       {
         $set: {
           ...req.body,
-          profilepic: newprofilePic || doctor.profilePic,
+          profilepic: newProfilePic || doctor.profilePic,
         },
       },
       { new: true }
