@@ -80,9 +80,11 @@ const userLogin = async (
     }
     const existedUser = await User.findOne({ email })
 
-    console.log(existedUser)
-    if (!existedUser) {
-      return errorHandler(400, "User not found")
+    console.log("existed user=>", existedUser)
+    if (existedUser === null) {
+      return res
+        .status(404)
+        .json({ success: false, message: "You have register first" })
     }
 
     const ismatchPassword = bcryptjs.compareSync(password, existedUser.password)
@@ -111,7 +113,7 @@ const userLogin = async (
       patientproStatus = true
     }
 
-    res
+    return res
       .cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
       .status(200)
       .json({ patientproStatus, rest })
