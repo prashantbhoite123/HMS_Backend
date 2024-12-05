@@ -114,7 +114,12 @@ const userLogin = async (
     }
 
     return res
-      .cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
+      .cookie("token", token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+        secure: true,
+        sameSite: "none",
+      })
       .status(200)
       .json({ patientproStatus, rest })
   } catch (error) {
