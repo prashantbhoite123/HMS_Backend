@@ -62,7 +62,7 @@ const updateUserProfile = async (
 
     const pictureUrl = await uploadImage(req.file as Express.Multer.File)
 
-    if (req.body.password) {
+    if (req.body.password !== "") {
       req.body.password = bcryptjs.hashSync(req.body.password, 10)
     }
     const updatedUser = await User.findByIdAndUpdate(
