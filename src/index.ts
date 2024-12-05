@@ -45,6 +45,12 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
+app.get("/health", async (req: Request, res: Response) => {
+  res.send({
+    message: "health ok",
+  })
+})
+
 app.get("/", (req: Request, res: Response) => {
   res.send("hello Prashant")
 })

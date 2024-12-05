@@ -150,14 +150,15 @@ const doctorLogin = async (
       next(errorHandler(400, "All field are required"))
     }
     const existDoctor = await Doctors.findOne({ email })
+    console.log("exist doctor", typeof existDoctor)
     if (!existDoctor) {
-      return errorHandler(400, "Doctor not found")
+      return next(errorHandler(400, "doctor not found"))
     }
 
     const ismatchPassword = bcryptjs.compareSync(password, existDoctor.password)
 
     if (!ismatchPassword) {
-      return errorHandler(400, "Invalid email or password")
+      return next(errorHandler(400, "Invalid email or password"))
     }
 
     const { password: abc, ...rest } = existDoctor.toObject()
@@ -166,7 +167,7 @@ const doctorLogin = async (
     res
       .cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
       .status(200)
-      .json(rest)
+      .json({ success: true, message: "User login successfuly", rest })
   } catch (error) {
     console.log(`Error while login Doctor :${error}`)
     res.status(500).json({ message: "something went wrong" })
