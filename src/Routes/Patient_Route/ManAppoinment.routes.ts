@@ -17,7 +17,7 @@ router.put(
 
 router.get(
   "/search",
-  // isAuthentication,
+  isAuthentication,
   ManageAppoinment.searchAppoinment
 )
 
