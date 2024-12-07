@@ -291,7 +291,7 @@ const getAllDashData = async (
     } else {
       throw errorHandler(403, "Unauthorized role")
     }
-
+    
     return res.json(data)
   } catch (error: any) {
     return next(errorHandler(400, error.message || "Failed to fetch data"))

@@ -165,7 +165,13 @@ const doctorLogin = async (
     const token = jwt.sign({ _id: existDoctor._id }, SECRETKEY as string)
 
     res
-      .cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        // secure: true,
+        sameSite: "none",
+        maxAge: 24 * 60 * 60 * 1000,
+      })
       .status(200)
       .json({ success: true, message: "User login successfuly", rest })
   } catch (error) {
