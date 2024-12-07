@@ -113,15 +113,18 @@ const userLogin = async (
       patientproStatus = true
     }
 
-    return res
+    res
       .cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
+        // secure: true,
         sameSite: "none",
         maxAge: 24 * 60 * 60 * 1000,
       })
       .status(200)
       .json({ patientproStatus, rest })
+    console.log("Set-Cookie Header:", res.getHeaders()["set-cookie"])
+    console.log("NODE_ENV:", process.env.NODE_ENV)
   } catch (error) {
     console.log(`Error while login hospital :${error}`)
     res.status(500).json({ message: "something went wrong" })
